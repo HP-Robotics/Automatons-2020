@@ -1,0 +1,35 @@
+Driving
+- Encoders - AMTs
+- RIO based Motion Profiling
+- Gyroscope
+
+Autos
+- Cross auto line
+- Shoot 3 balls
+- Shoot 3 balls, intake at trench, and shoot.
+- Shoot 3 balls, take balls off bumps. [Bad idea because bumps]
+
+Intake
+- Run a motor
+
+Hopper
+- Run a motor perpetually
+- Maybe add a PID
+
+Lifter
+- Run a motor
+
+Shooter
+- Run flywheel with a PID
+- Manually changing the turret
+- PID control for automatic turret aim
+- Hood control with a PID
+
+Climber
+* Awaiting design
+
+Control Panel
+- Have a camera or a color sensor
+- Run motor to turn wheel rotional (maybe automatic with a PID)
+- Positional control (just turn wheel slowly until the color is reached)
+
