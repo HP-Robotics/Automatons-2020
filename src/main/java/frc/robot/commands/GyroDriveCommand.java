@@ -18,7 +18,7 @@ public class GyroDriveCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveSubsystem m_subsystem;
 
-  private static final double kP = 1;
+  private static final double kP = 0.03;
 
   Joystick joystick;
 
@@ -32,14 +32,15 @@ public class GyroDriveCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_subsystem.gyro.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double error = m_subsystem.getGyroRate();
+    double error = m_subsystem.gyro.getAngle();
 
-    m_subsystem.drive(joystick.getRawAxis(1) + (kP * error), joystick.getRawAxis(1) + (kP * error));
+    m_subsystem.drive(-joystick.getRawAxis(1) - (kP * error), -joystick.getRawAxis(1) + (kP * error));
   }
 
   // Called once the command ends or is interrupted.

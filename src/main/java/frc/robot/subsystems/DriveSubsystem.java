@@ -13,14 +13,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
 
+  public ADXRS450_Gyro gyro;
+  public Encoder leftEnc;
+  public Encoder rightEnc;
+  
   SpeedControllerGroup left;
   SpeedControllerGroup right;
 
   DifferentialDrive tankDrive;
-
-  ADXRS450_Gyro gyro;
-  Encoder leftEnc;
-  Encoder rightEnc;
 
   public DriveSubsystem() {
     
@@ -49,9 +49,5 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void drive(double left, double right) {
     tankDrive.tankDrive(left, right);
-  }
-
-  public double getGyroRate() {
-    return gyro.getRate();
   }
 }
