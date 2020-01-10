@@ -39,7 +39,7 @@ public class GyroDriveCommand extends CommandBase {
   public void execute() {
     double error = m_subsystem.getGyroRate();
 
-    m_subsystem.drive(joystick.getRawAxis(1) + (kP * error), joystick.getRawAxis(3) + (kP * error));
+    m_subsystem.drive(joystick.getRawAxis(1) + (kP * error), joystick.getRawAxis(1) + (kP * error));
   }
 
   // Called once the command ends or is interrupted.
