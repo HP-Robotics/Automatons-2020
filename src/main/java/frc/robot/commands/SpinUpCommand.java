@@ -31,7 +31,7 @@ public class SpinUpCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setShooter(1.0);
+    m_subsystem.setShooter(-0.9);
   }
 
   // Called once the command ends or is interrupted.
