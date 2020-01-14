@@ -1,7 +1,6 @@
 Driving
 - Encoders - AMTs
 - RIO based Motion Profiling
-- Gyroscope
 
 Autos
 - Cross auto line
@@ -33,3 +32,12 @@ Control Panel
 - Run motor to turn wheel rotional (maybe automatic with a PID)
 - Positional control (just turn wheel slowly until the color is reached)
 
+Sensors
+- Limelight
+- Color Sensor (?)
+- Webcam
+- 2x Encoders (Drivetrain)
+- 1x Encoder (Control Panel)
+- 1x Encoder (Turret Ring)
+- 1x Encoder (Hood Control)
+- 1x Encoder (Elevator Control)
