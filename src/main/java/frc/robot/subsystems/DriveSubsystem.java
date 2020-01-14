@@ -5,11 +5,9 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.CounterBase;
-
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -21,18 +19,12 @@ public class DriveSubsystem extends SubsystemBase {
   SpeedControllerGroup left;
   SpeedControllerGroup right;
 
-  Encoder leftEncoder;
-  Encoder rightEncoder;
-
   DifferentialDrive tankDrive;
 
   public DriveSubsystem() {
     
     left = new SpeedControllerGroup(new WPI_TalonSRX(10), new WPI_TalonSRX(12));
     right = new SpeedControllerGroup(new WPI_TalonSRX(11), new WPI_TalonSRX(13));
-
-    leftEncoder = new Encoder(0, 1); // TODO - Add correct DIO ports
-    rightEncoder = new Encoder(2, 3); // TODO - Add correct DIO ports
     
     tankDrive = new DifferentialDrive(left, right);
 
@@ -56,6 +48,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void drive(double left, double right) {
     tankDrive.tankDrive(left, right);
-    System.out.printf("Left Encoder: %06d Right Encoder: %06d \n", leftEncoder.get(), rightEncoder.get());
+    System.out.printf("Left Encoder: %06d Right Encoder: %06d \n", leftEnc.get(), rightEnc.get());
   }
 }

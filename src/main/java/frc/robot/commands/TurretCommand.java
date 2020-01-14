@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,19 +8,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 
-public class SpinUpCommand extends CommandBase {
-  /**
-   * Creates a new ShootCommand.
-   */
+/**
+ * An example command that uses an example subsystem.
+ */
+public class TurretCommand extends CommandBase {
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  private final TurretSubsystem m_subsystem;
 
-  private final ShooterSubsystem m_subsystem;
-  
-  public SpinUpCommand(ShooterSubsystem subsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  Joystick joystick;
+
+  public TurretCommand(TurretSubsystem subsystem) {
     m_subsystem = subsystem;
-    addRequirements(m_subsystem);
+    joystick = new Joystick(1);
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -31,13 +35,14 @@ public class SpinUpCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setShooter(-1.0);
+    m_subsystem.driveSpeed(joystick.getRawAxis(0));
+    System.out.println("Turret is running");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setShooter(0.0);
+    m_subsystem.driveSpeed(0.0);
   }
 
   // Returns true when the command should end.
@@ -45,5 +50,4 @@ public class SpinUpCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-
 }

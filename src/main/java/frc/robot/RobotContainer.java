@@ -12,9 +12,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroDriveCommand;
+import frc.robot.commands.TurretCommand;
 import frc.robot.commands.SpinUpCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -33,6 +35,10 @@ public class RobotContainer {
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
+  private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
+
+  private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem);
+
   private final Joystick m_driverStick = new Joystick(0);
 
 
@@ -41,6 +47,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_driveSubsystem.setDefaultCommand(m_tankDrive);
+    m_turretSubsystem.setDefaultCommand(m_turretCommand);
     configureButtonBindings();
   }
 
