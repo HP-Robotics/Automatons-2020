@@ -29,8 +29,8 @@ public class DriveSubsystem extends SubsystemBase {
     tankDrive = new DifferentialDrive(left, right);
 
     gyro = new ADXRS450_Gyro();
-    leftEnc = new Encoder(0, 1, false, CounterBase.EncodingType.k4X);
-    rightEnc = new Encoder(2, 3, false, CounterBase.EncodingType.k4X);
+    leftEnc = new Encoder(23, 24, false, CounterBase.EncodingType.k4X);
+    rightEnc = new Encoder(21, 22, true, CounterBase.EncodingType.k4X);
 
     gyro.calibrate();
     gyro.reset();
