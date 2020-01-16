@@ -12,9 +12,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroDriveCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.SpinUpCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +41,10 @@ public class RobotContainer {
 
   private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem);
 
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+
+  private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSubsystem);
+
   private final Joystick m_driverStick = new Joystick(0);
 
 
@@ -60,6 +66,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_driverStick, 4).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
     new JoystickButton(m_driverStick, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem));
+    new JoystickButton(m_driverStick, 2).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
   }
 
   /**

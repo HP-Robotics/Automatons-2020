@@ -1,5 +1,5 @@
 Driving
-- Encoders - AMTs
+- (Done) Encoders - AMTs
 - RIO based Motion Profiling
 
 Autos
@@ -9,7 +9,7 @@ Autos
 - Shoot 3 balls, take balls off bumps. [Bad idea because bumps]
 
 Intake
-- Run a motor
+- (Done) Run a motor
 
 Hopper
 - Run a motor perpetually
@@ -20,7 +20,8 @@ Lifter
 
 Shooter
 - Run flywheel with a PID
-- Manually changing the turret
+- (Done) Manually changing the turret
+- Manually changing turret angle to specified angle from encoder, not with motor power
 - PID control for automatic turret aim
 - Hood control with a PID
 
