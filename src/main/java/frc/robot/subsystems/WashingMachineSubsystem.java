@@ -14,7 +14,7 @@ public class WashingMachineSubsystem extends SubsystemBase {
   public double velocity = 0.0;
 
   public WashingMachineSubsystem() {
-    spinnerMotor = new TalonSRX(50); //TODO - Make sure to correct device ID
+    spinnerMotor = new TalonSRX(Constants.washingMachineMotorId); //TODO - Make sure to correct device ID
     
     spinnerMotor.configFactoryDefault();
 
@@ -25,13 +25,14 @@ public class WashingMachineSubsystem extends SubsystemBase {
 	 * Phase sensor accordingly. 
      * Positive Sensor Reading should match Green (blinking) Leds on Talon
      */
-	spinnerMotor.setSensorPhase(true);
+	spinnerMotor.setSensorPhase(false);
 
 	/* Config the peak and nominal outputs */
 	spinnerMotor.configNominalOutputForward(0, Constants.washingMachineTimeout);
 	spinnerMotor.configNominalOutputReverse(0, Constants.washingMachineTimeout);
 	spinnerMotor.configPeakOutputForward(1, Constants.washingMachineTimeout);
-	spinnerMotor.configPeakOutputReverse(-1, Constants.washingMachineTimeout);
+  spinnerMotor.configPeakOutputReverse(-1, Constants.washingMachineTimeout);
+
 
 	/* Config the Velocity closed loop gains in slot0 */
 	spinnerMotor.config_kF(0, Constants.washingMachineF, Constants.washingMachineTimeout);

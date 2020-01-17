@@ -10,6 +10,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.WashingMachineSubsystem;
 
+import frc.robot.Constants;
+
 public class SpinWasherCommand extends CommandBase {
 
   public final WashingMachineSubsystem m_subsystem;
@@ -30,7 +32,7 @@ public class SpinWasherCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.velocity = 300.0;
+    m_subsystem.velocity = Constants.washingMachineSpeed;
   }
 
   // Called once the command ends or is interrupted.

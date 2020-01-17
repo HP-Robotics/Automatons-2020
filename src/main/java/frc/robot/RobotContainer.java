@@ -47,7 +47,7 @@ public class RobotContainer {
 
   private final WashingMachineSubsystem m_washingMachineSubsystem = new WashingMachineSubsystem();
 
-  private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
+  // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
 
   private final Joystick m_driverStick = new Joystick(0);
 
@@ -58,7 +58,6 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveSubsystem.setDefaultCommand(m_tankDrive);
     m_turretSubsystem.setDefaultCommand(m_turretCommand);
-    m_washingMachineSubsystem.setDefaultCommand(m_spinWasherCommand);
     configureButtonBindings();
   }
 
