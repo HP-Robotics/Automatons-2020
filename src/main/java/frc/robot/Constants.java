@@ -16,4 +16,9 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static double washingMachineP = 0.0;
+    public static double washingMachineI = 0.0;
+    public static double washingMachineD = 0.0;
+    public static double washingMachineF = 0.0;
+    public static int washingMachineTimeout = 30;
 }

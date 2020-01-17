@@ -15,10 +15,12 @@ import frc.robot.commands.GyroDriveCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.SpinUpCommand;
+import frc.robot.commands.SpinWasherCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
+import frc.robot.subsystems.WashingMachineSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -43,7 +45,9 @@ public class RobotContainer {
 
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
-  private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSubsystem);
+  private final WashingMachineSubsystem m_washingMachineSubsystem = new WashingMachineSubsystem();
+
+  private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
 
   private final Joystick m_driverStick = new Joystick(0);
 
@@ -54,6 +58,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveSubsystem.setDefaultCommand(m_tankDrive);
     m_turretSubsystem.setDefaultCommand(m_turretCommand);
+    m_washingMachineSubsystem.setDefaultCommand(m_spinWasherCommand);
     configureButtonBindings();
   }
 
@@ -67,6 +72,7 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 4).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
     new JoystickButton(m_driverStick, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem));
     new JoystickButton(m_driverStick, 2).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
+    new JoystickButton(m_driverStick, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
   }
 
   /**
