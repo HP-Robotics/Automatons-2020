@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -35,8 +36,7 @@ public class TurretCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.driveSpeed(joystick.getRawAxis(0));
-    System.out.println("Turret is running");
+    m_subsystem.driveSpeed(joystick.getRawAxis(Constants.turretAxis));
   }
 
   // Called once the command ends or is interrupted.

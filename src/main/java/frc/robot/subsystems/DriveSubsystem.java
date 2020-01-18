@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -23,8 +24,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   public DriveSubsystem() {
     
-    left = new SpeedControllerGroup(new WPI_TalonSRX(10), new WPI_TalonSRX(12));
-    right = new SpeedControllerGroup(new WPI_TalonSRX(11), new WPI_TalonSRX(13));
+    left = new SpeedControllerGroup(new WPI_TalonSRX(Constants.frontLeftMotorID), new WPI_TalonSRX(Constants.rearLeftMotorID));
+    right = new SpeedControllerGroup(new WPI_TalonSRX(Constants.frontRightMotorID), new WPI_TalonSRX(Constants.rearRightMotorID));
     
     tankDrive = new DifferentialDrive(left, right);
 
@@ -48,6 +49,5 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void drive(double left, double right) {
     tankDrive.tankDrive(left, right);
-    System.out.printf("Left Encoder: %06d Right Encoder: %06d \n", leftEnc.get(), rightEnc.get());
   }
 }

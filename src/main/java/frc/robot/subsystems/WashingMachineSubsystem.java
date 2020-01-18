@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.Constants;
@@ -20,6 +21,7 @@ public class WashingMachineSubsystem extends SubsystemBase {
     pdp = new PowerDistributionPanel();
     
     spinnerMotor.configFactoryDefault();
+    spinnerMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, Constants.washingMachineLimitedCurrent, Constants.washingMachineMaxCurrent, Constants.washingMachineThresholdTime));
 
 	/* Config sensor used for Primary PID [Velocity] */
     spinnerMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.washingMachineTimeout);
@@ -48,6 +50,9 @@ public class WashingMachineSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Current", pdp.getCurrent(Constants.washingMachinePDPChannel));
+    if (pdp.getCurrent(Constants.washingMachinePDPChannel) > 0.0) {
+        System.out.println("Current draw: " + pdp.getCurrent(Constants.washingMachinePDPChannel));
+    }
   }
 
   public void setVelocity(double velocity) {

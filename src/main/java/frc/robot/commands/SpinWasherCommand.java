@@ -38,7 +38,7 @@ public class SpinWasherCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setVelocity(0.0);;
+    m_subsystem.setVelocity(Constants.washingMachineOff);
   }
 
   // Returns true when the command should end.
