@@ -28,14 +28,15 @@ public final class Constants {
     public static final double washingMachineP = 0.01;
     public static final double washingMachineI = 0.0002;
     public static final double washingMachineD = 0.0;
-    public static final double washingMachineF = 0.15;
+    //public static final double washingMachineF = 0.15;
+    public static final double washingMachineF = 0.0;
     public static final int washingMachineTimeout = 30;
-    public static final double washingMachineSpeed = 1000.0;
+    public static final double washingMachineSpeed = 20000.0;
     public static final double washingMachineOff = 0.0;
     public static final int washingMachinePDPChannel = 13;
     public static final double washingMachineMaxCurrent = 18.0;
     public static final double washingMachineLimitedCurrent = 5.0;
-    public static final double washingMachineThresholdTime = 0.1;
+    public static final double washingMachineThresholdTime = 2.0;
 
     public static final double turretCoefficient = 0.5;
     public static final int turretAxis = 0;

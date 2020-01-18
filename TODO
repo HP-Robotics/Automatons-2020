@@ -12,8 +12,7 @@ Intake
 - (Done) Run a motor
 
 Hopper
-- Run a motor perpetually
-- Maybe add a PID
+- Maybe detect a jam and run backwards for a little bit
 
 Lifter
 - Run a motor
@@ -23,6 +22,7 @@ Shooter
 - (Done) Manually changing the turret
 - Manually changing turret angle to specified angle from encoder, not with motor power
 - PID control for automatic turret aim
+- Absolute position for turret
 - Hood control with a PID
 
 Climber
