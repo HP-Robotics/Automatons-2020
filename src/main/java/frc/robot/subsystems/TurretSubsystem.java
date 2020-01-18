@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -12,7 +13,7 @@ public class TurretSubsystem extends SubsystemBase {
   Encoder angleEncoder;
 
   public TurretSubsystem() {
-    turretDriver = new TalonSRX(20);
+    turretDriver = new TalonSRX(Constants.turretRingMotorId);
   }
 
   @Override
@@ -21,7 +22,7 @@ public class TurretSubsystem extends SubsystemBase {
   }
 
   public void driveSpeed(double speed) {
-    turretDriver.set(ControlMode.PercentOutput, speed * 0.5);
+    turretDriver.set(ControlMode.PercentOutput, speed * Constants.turretCoefficient);
   }
 
   public void driveAngle() {

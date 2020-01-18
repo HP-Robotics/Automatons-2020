@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -11,10 +13,11 @@ import frc.robot.Constants;
 public class WashingMachineSubsystem extends SubsystemBase {
 
   private TalonSRX spinnerMotor;
-  public double velocity = 0.0;
+  private PowerDistributionPanel pdp;
 
   public WashingMachineSubsystem() {
     spinnerMotor = new TalonSRX(Constants.washingMachineMotorId); //TODO - Make sure to correct device ID
+    pdp = new PowerDistributionPanel();
     
     spinnerMotor.configFactoryDefault();
 
@@ -31,7 +34,7 @@ public class WashingMachineSubsystem extends SubsystemBase {
 	spinnerMotor.configNominalOutputForward(0, Constants.washingMachineTimeout);
 	spinnerMotor.configNominalOutputReverse(0, Constants.washingMachineTimeout);
 	spinnerMotor.configPeakOutputForward(1, Constants.washingMachineTimeout);
-  spinnerMotor.configPeakOutputReverse(-1, Constants.washingMachineTimeout);
+    spinnerMotor.configPeakOutputReverse(-1, Constants.washingMachineTimeout);
 
 
 	/* Config the Velocity closed loop gains in slot0 */
@@ -44,6 +47,10 @@ public class WashingMachineSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Current", pdp.getCurrent(Constants.washingMachinePDPChannel));
+  }
+
+  public void setVelocity(double velocity) {
     spinnerMotor.set(ControlMode.Velocity, velocity);
   }
 }

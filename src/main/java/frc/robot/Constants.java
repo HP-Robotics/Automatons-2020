@@ -22,6 +22,10 @@ public final class Constants {
     public static final double washingMachineF = 0.15;
     public static final int washingMachineTimeout = 30;
     public static final double washingMachineSpeed = 1000.0;
+    public static final int washingMachinePDPChannel = 13; 
 
+    public static final double turretCoefficient = 0.5;
+
+    public static final int turretRingMotorId = 20;
     public static final int washingMachineMotorId = 30;
 }
