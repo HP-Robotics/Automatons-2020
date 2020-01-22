@@ -38,12 +38,19 @@ public final class Constants {
     public static final double washingMachineLimitedCurrent = 5.0;
     public static final double washingMachineThresholdTime = 2.0;
 
+    public static final double shooterP = 1;
+    public static final double shooterI = 0.005;
+    public static final double shooterD = 1;
+    public static final double shooterF = 0;
+    public static final int shooterTimeout = 30;
+    public static final double shooterFullspeed = -15000.0;
+    public static final double shooterOff = 0.0;
+
     public static final double turretCoefficient = 0.5;
     public static final int turretAxis = 0;
 
-    public static final double shooterFullspeed = -1.0;
-    public static final double shooterOff = 0.0;
-
     public static final int turretRingMotorId = 20;
     public static final int washingMachineMotorId = 30;
+    public static final int shooterMotor1Id = 40;
+    public static final int shooterMotor2Id = 41;
 }
