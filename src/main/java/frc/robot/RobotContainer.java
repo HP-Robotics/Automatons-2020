@@ -33,9 +33,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final Joystick m_driverStick = new Joystick(0);
+
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
-  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem);
+  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> -m_driverStick.getRawAxis(1), () -> -m_driverStick.getRawAxis(3));
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
@@ -48,8 +50,6 @@ public class RobotContainer {
   private final WashingMachineSubsystem m_washingMachineSubsystem = new WashingMachineSubsystem();
 
   // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
-
-  private final Joystick m_driverStick = new Joystick(0);
 
 
   /**
@@ -69,7 +69,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(m_driverStick, 4).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
-    new JoystickButton(m_driverStick, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem));
+    new JoystickButton(m_driverStick, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> -m_driverStick.getRawAxis(1)));
     new JoystickButton(m_driverStick, 2).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_driverStick, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
   }

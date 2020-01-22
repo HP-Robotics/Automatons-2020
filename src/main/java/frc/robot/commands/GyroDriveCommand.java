@@ -9,7 +9,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
-import edu.wpi.first.wpilibj.Joystick;
+
+import java.util.function.DoubleSupplier;
 
 /**
  * An example command that uses an example subsystem.
@@ -20,11 +21,11 @@ public class GyroDriveCommand extends CommandBase {
 
   private static final double kP = 0.03;
 
-  Joystick joystick;
+  DoubleSupplier driveSupplier;
 
-  public GyroDriveCommand(DriveSubsystem subsystem) {
+  public GyroDriveCommand(DriveSubsystem subsystem, DoubleSupplier input) {
     m_subsystem = subsystem;
-    joystick = new Joystick(0);
+    driveSupplier = input;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -40,13 +41,13 @@ public class GyroDriveCommand extends CommandBase {
   public void execute() {
     double error = m_subsystem.gyro.getAngle();
 
-    m_subsystem.drive(-joystick.getRawAxis(1) - (kP * error), -joystick.getRawAxis(1) + (kP * error));
+    m_subsystem.drive(driveSupplier.getAsDouble() - (kP * error), driveSupplier.getAsDouble() + (kP * error));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.drive(0, 0);
+    m_subsystem.drive(0.0, 0.0);
   }
 
   // Returns true when the command should end.
