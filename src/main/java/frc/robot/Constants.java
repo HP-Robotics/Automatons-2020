@@ -47,6 +47,8 @@ public final class Constants {
     public static final double shooterOff = 0.0;
 
     public static final double turretCoefficient = 0.5;
+    public static final int turretClosedLoopSensor = 0;
+    public static final int turretSensorTimeout = 100;
     public static final int turretAxis = 0;
 
     public static final int turretRingMotorId = 20;
