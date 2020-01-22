@@ -30,19 +30,18 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.configFactoryDefault();
     m_shooterFollower.configFactoryDefault();
 
-    m_shooterFollower.setInverted(false);
+    m_shooterFollower.setInverted(true);
     m_shooterFollower.follow(m_shooterController);
 
     /* Config sensor used for Primary PID [Velocity] */
-    m_shooterController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0,
+    m_shooterController.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0,
             Constants.shooterTimeout);
 
     /**
      * Phase sensor accordingly. Positive Sensor Reading should match Green
      * (blinking) Leds on Talon
      */
-    m_shooterController.setSensorPhase(false);
-
+    
     /* Config the peak and nominal outputs */
     m_shooterController.configNominalOutputForward(0, Constants.shooterTimeout);
     m_shooterController.configNominalOutputReverse(0, Constants.shooterTimeout);
@@ -50,10 +49,10 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.configPeakOutputReverse(-1, Constants.shooterTimeout);
 
     /* Config the Velocity closed loop gains in slot0 */
-    m_shooterController.config_kF(0, Constants.washingMachineF, Constants.shooterTimeout);
-    m_shooterController.config_kP(0, Constants.washingMachineP, Constants.shooterTimeout);
-    m_shooterController.config_kI(0, Constants.washingMachineI, Constants.shooterTimeout);
-    m_shooterController.config_kD(0, Constants.washingMachineD, Constants.shooterTimeout);
+    m_shooterController.config_kF(0, Constants.shooterF, Constants.shooterTimeout);
+    m_shooterController.config_kP(0, Constants.shooterP, Constants.shooterTimeout);
+    m_shooterController.config_kI(0, Constants.shooterI, Constants.shooterTimeout);
+    m_shooterController.config_kD(0, Constants.shooterD, Constants.shooterTimeout);
 
     m_shooterController.config_IntegralZone(0, 1000);
     m_shooterController.configVelocityMeasurementWindow(1);
