@@ -42,3 +42,7 @@ Sensors
 - 1x Encoder (Turret Ring)
 - 1x Encoder (Hood Control)
 - 1x Encoder (Elevator Control)
+
+Programming Next Steps:
+- Combine turret with Shooter
+- Turn SpinUpCommand into ShooterCommand

@@ -9,21 +9,22 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.TurretSubsystem;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.ShooterSubsystem;
+
+import java.util.function.DoubleSupplier;
 
 /**
  * An example command that uses an example subsystem.
  */
 public class TurretCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final TurretSubsystem m_subsystem;
+  private final ShooterSubsystem m_subsystem;
 
-  Joystick joystick;
+  DoubleSupplier m_turretSpeed;
 
-  public TurretCommand(TurretSubsystem subsystem) {
+  public TurretCommand(ShooterSubsystem subsystem, DoubleSupplier input) {
     m_subsystem = subsystem;
-    joystick = new Joystick(1);
+    m_turretSpeed = input;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -36,13 +37,13 @@ public class TurretCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.driveSpeed(joystick.getRawAxis(Constants.turretAxis));
+    m_subsystem.setTurretSpeed(m_turretSpeed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.driveSpeed(0.0);
+    m_subsystem.setTurretSpeed(Constants.turretOff);
   }
 
   // Returns true when the command should end.

@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -22,6 +23,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   TalonFX m_shooterController;
   TalonFX m_shooterFollower;
+
+  TalonSRX m_turretController;
 
   public ShooterSubsystem() {
     m_shooterController = new TalonFX(Constants.shooterMotor2Id);
@@ -57,6 +60,8 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.config_IntegralZone(0, 1000);
     m_shooterController.configVelocityMeasurementWindow(1);
     m_shooterController.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+
+    m_turretController = new TalonSRX(Constants.turretRingMotorId);
   }
 
   @Override
@@ -69,5 +74,9 @@ public class ShooterSubsystem extends SubsystemBase {
       m_shooterController.set(ControlMode.PercentOutput, 0.0);
     else
       m_shooterController.set(ControlMode.Velocity, speed);
+  }
+
+  public void setTurretSpeed(double speed) {
+    m_turretController.set(ControlMode.PercentOutput, speed * Constants.turretCoefficient);
   }
 }

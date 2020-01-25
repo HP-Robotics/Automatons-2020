@@ -7,14 +7,13 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroDriveCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.AutoCommandTest;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.SpinUpCommand;
 import frc.robot.commands.SpinWasherCommand;
@@ -37,15 +36,14 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
-  private final Joystick m_driverStick = new Joystick(0);
+  private final Joystick m_driverStick = new Joystick(0); //TODO - split into two controllers, use constants.
+  private final Joystick m_operatorStick = new Joystick(1);
 
   private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> m_driverStick.getRawAxis(1),() -> m_driverStick.getRawAxis(3));
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
-  private final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
-
-  private final TurretCommand m_turretCommand = new TurretCommand(m_turretSubsystem);
+  private final TurretCommand m_turretCommand = new TurretCommand(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0));
 
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
@@ -63,7 +61,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_driveSubsystem.setDefaultCommand(m_tankDrive);
-    m_turretSubsystem.setDefaultCommand(m_turretCommand);
+    m_shooterSubsystem.setDefaultCommand(m_turretCommand);
     configureButtonBindings();
   }
 
