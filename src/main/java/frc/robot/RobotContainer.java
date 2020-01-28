@@ -37,11 +37,11 @@ public class RobotContainer {
   private final Joystick m_driverStick = new Joystick(0); //TODO - split into two controllers, use constants.
   private final Joystick m_operatorStick = new Joystick(1);
 
-  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> m_driverStick.getRawAxis(1),() -> m_driverStick.getRawAxis(3));
+  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> m_driverStick.getRawAxis(1), () -> m_driverStick.getRawAxis(3));
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
-  private final TurretCommand m_turretCommand = new TurretCommand(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0));
+  private final TurretCommand m_turretCommand = new TurretCommand(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0), () -> m_operatorStick.getRawAxis(1));
 
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 

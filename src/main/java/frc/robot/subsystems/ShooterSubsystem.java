@@ -25,6 +25,7 @@ public class ShooterSubsystem extends SubsystemBase {
   TalonFX m_shooterFollower;
 
   TalonSRX m_turretController;
+  TalonSRX m_hoodController;
 
   public ShooterSubsystem() {
     m_shooterController = new TalonFX(Constants.shooterMotor2Id);
@@ -62,6 +63,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
 
     m_turretController = new TalonSRX(Constants.turretRingMotorId);
+    m_hoodController = new TalonSRX(Constants.hoodMotorId);
   }
 
   @Override
@@ -76,7 +78,10 @@ public class ShooterSubsystem extends SubsystemBase {
       m_shooterController.set(ControlMode.Velocity, speed);
   }
 
-  public void setTurretSpeed(double speed) {
-    m_turretController.set(ControlMode.PercentOutput, speed * Constants.turretCoefficient);
+  public void setTurretSpeed(double horizontalSpeed, double verticalSpeed) {
+    if (Constants.allowTurretPercentOutput) {
+      m_turretController.set(ControlMode.PercentOutput, horizontalSpeed * Constants.turretCoefficient);
+      m_hoodController.set(ControlMode.PercentOutput, verticalSpeed * Constants.hoodCoefficient);
+    }
   }
 }
