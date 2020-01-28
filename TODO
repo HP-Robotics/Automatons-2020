@@ -12,33 +12,40 @@ Intake
 - (Done) Run a motor
 
 Hopper
+- (Done) Current Protection
 - Maybe detect a jam and run backwards for a little bit
 
 Lifter
 - Run a motor
 
 Shooter
-- Run flywheel with a PID
+- (Done?) Run flywheel with a PID
 - (Done) Manually changing the turret
-- Manually changing turret angle to specified angle from encoder, not with motor power
-- PID control for automatic turret aim
-- Absolute position for turret
-- Hood control with a PID
+- Manually changing turret angle to specified angle from encoder, not with motor power (Waiting on encoder fix)
+- Install Limelight (Hood or ring?)
+- PID control for automatic turret aim (Waiting on encoder fix)
+- Absolute position for turret (Through-bore encoder)
+- Hood control with a PID (Waiting on Motor install and gear install)
 
 Climber
 * Awaiting design
 
 Control Panel
+- Design control panel manipulator
 - Have a camera or a color sensor
-- Run motor to turn wheel rotional (maybe automatic with a PID)
+- Run motor to turn wheel (maybe automatic with a PID)
 - Positional control (just turn wheel slowly until the color is reached)
 
 Sensors
 - Limelight
 - Color Sensor (?)
 - Webcam
-- 2x Encoders (Drivetrain)
+- (Done) 2x Encoders (Drivetrain)
 - 1x Encoder (Control Panel)
-- 1x Encoder (Turret Ring)
+- (Broken, need to be repaired) 1x Encoder (Turret Ring)
 - 1x Encoder (Hood Control)
 - 1x Encoder (Elevator Control)
+
+Programming Next Steps:
+- (Done?) Combine turret with Shooter
+- Turn SpinUpCommand into ShooterCommand

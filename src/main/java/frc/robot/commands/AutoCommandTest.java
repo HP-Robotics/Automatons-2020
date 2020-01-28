@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,27 +8,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-import java.util.function.DoubleSupplier;
+public class AutoCommandTest extends CommandBase {
+  /**
+   * Creates a new ShootCommand.
+   */
 
-/**
- * An example command that uses an example subsystem.
- */
-public class TurretCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ShooterSubsystem m_subsystem;
-
-  DoubleSupplier m_turretSpeed;
-  DoubleSupplier m_hoodSpeed;
-
-  public TurretCommand(ShooterSubsystem subsystem, DoubleSupplier horizontal, DoubleSupplier vertical) {
-    m_subsystem = subsystem;
-    m_turretSpeed = horizontal;
-    m_hoodSpeed = vertical;
+  private final DriveSubsystem m_subsystem;
+  
+  public AutoCommandTest(DriveSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    m_subsystem = subsystem;
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -39,13 +31,12 @@ public class TurretCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setTurretSpeed(m_turretSpeed.getAsDouble(), m_hoodSpeed.getAsDouble());
+    System.out.println("AutoTestCommand is being run.");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setTurretSpeed(Constants.turretOff, Constants.hoodOff);
   }
 
   // Returns true when the command should end.
@@ -53,4 +44,5 @@ public class TurretCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
 }

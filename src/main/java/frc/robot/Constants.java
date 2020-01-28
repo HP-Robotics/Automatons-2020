@@ -46,12 +46,17 @@ public final class Constants {
     public static final double shooterFullspeed = 15000.0;
     public static final double shooterOff = 0.0;
 
+    public static final boolean allowTurretPercentOutput = false; // TODO FIX THIS
     public static final double turretCoefficient = 0.5;
+    public static final double hoodCoefficient = 0.5;
+    public static final double turretOff = 0.0;
+    public static final double hoodOff = 0.0;
     public static final int turretClosedLoopSensor = 0;
     public static final int turretSensorTimeout = 100;
     public static final int turretAxis = 0;
 
     public static final int turretRingMotorId = 20;
+    public static final int hoodMotorId = 21;
     public static final int washingMachineMotorId = 30;
     public static final int shooterMotor1Id = 41;
     public static final int shooterMotor2Id = 40;
