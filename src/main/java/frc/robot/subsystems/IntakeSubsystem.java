@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
   /**
@@ -24,9 +25,9 @@ public class IntakeSubsystem extends SubsystemBase {
   public void setEnabled(boolean state) {
       //TODO - Make motor spin
       if (state) {
-          intakeMotor.set(ControlMode.PercentOutput, 0.3); //TODO - Discuss speed
+          intakeMotor.set(ControlMode.PercentOutput, Constants.intakeSpeed); //TODO - Discuss speed
       } else {
-          intakeMotor.set(ControlMode.PercentOutput, 0);
+          intakeMotor.set(ControlMode.PercentOutput, 0.0);
       }
   }
 
