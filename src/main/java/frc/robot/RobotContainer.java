@@ -10,6 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.AutoCommandTest;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroDriveCommand;
 import frc.robot.commands.IntakeCommand;
@@ -47,6 +50,9 @@ public class RobotContainer {
 
   private final WashingMachineSubsystem m_washingMachineSubsystem = new WashingMachineSubsystem();
 
+  private final SendableChooser<Command> m_autonomousChooser;
+  private final SendableChooser<String> m_stringChooser;
+
   // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
 
   
@@ -58,6 +64,20 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    m_autonomousChooser = new SendableChooser<Command>();
+    m_autonomousChooser.setDefaultOption("Test", new AutoCommandTest(m_driveSubsystem));
+    SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
+    SmartDashboard.putNumber("Hood Position", 0.0);
+
+
+    m_stringChooser = new SendableChooser<String>();
+    //m_stringChooser.setDefaultOption("Default String", "Hi I am a string. 0");
+    m_stringChooser.addOption("String 1", "Hi I am a string. 1");
+    m_stringChooser.addOption("String 2", "Hi I am a string. 2");
+    m_stringChooser.addOption("String 3", "Hi I am a string. 3");
+    m_stringChooser.addOption("String 4", "Hi I am a string. 4");
+    SmartDashboard.putData("Choose a string", m_stringChooser);
+
     m_driveSubsystem.setDefaultCommand(m_tankDrive);
     m_shooterSubsystem.setDefaultCommand(m_turretCommand);
     configureButtonBindings();
@@ -74,9 +94,11 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> m_driverStick.getRawAxis(1)));
     new JoystickButton(m_driverStick, 2).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_driverStick, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
+    new JoystickButton(m_driverStick, 5).whenPressed(new InstantCommand(() -> m_shooterSubsystem.setHoodPosition(SmartDashboard.getNumber("Hood Position", 0.0))));
+    new JoystickButton(m_driverStick, 7).whenPressed(new InstantCommand(() -> m_shooterSubsystem.setHoodOff()));
   }
 
-  /**
+  /**S
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous

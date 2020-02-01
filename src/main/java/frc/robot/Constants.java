@@ -31,7 +31,7 @@ public final class Constants {
     //public static final double washingMachineF = 0.15;
     public static final double washingMachineF = 0.0;
     public static final int washingMachineTimeout = 30;
-    public static final double washingMachineSpeed = 20000.0;
+    public static final double washingMachineSpeed = -20000.0;
     public static final double washingMachineOff = 0.0;
     public static final int washingMachinePDPChannel = 13;
     public static final double washingMachineMaxCurrent = 18.0;
@@ -46,11 +46,17 @@ public final class Constants {
     public static final double shooterFullspeed = 15000.0;
     public static final double shooterOff = 0.0;
 
-    public static final boolean allowTurretPercentOutput = false; // TODO FIX THIS
+    public static final boolean allowTurretPercentOutput = true; // TODO FIX THIS
     public static final double turretCoefficient = 0.5;
-    public static final double hoodCoefficient = 0.5;
+    public static final double hoodCoefficient = 1;
     public static final double turretOff = 0.0;
     public static final double hoodOff = 0.0;
+    public static final double hoodP = 150;
+    public static final double hoodI = 0.01;
+    public static final double hoodD = 300;
+    public static final double hoodBottom = 153;
+    public static final double hoodTop = 72;
+    public static final int hoodAbsoluteEncoder = 2;
     public static final int turretClosedLoopSensor = 0;
     public static final int turretSensorTimeout = 100;
     public static final int turretAxis = 0;

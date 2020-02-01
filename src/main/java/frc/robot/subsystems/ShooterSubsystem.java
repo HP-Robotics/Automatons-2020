@@ -13,6 +13,9 @@ import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,12 +30,31 @@ public class ShooterSubsystem extends SubsystemBase {
   TalonSRX m_turretController;
   TalonSRX m_hoodController;
 
+  DutyCycleEncoder m_revAbsolute;
+
   public ShooterSubsystem() {
     m_shooterController = new TalonFX(Constants.shooterMotor2Id);
     m_shooterFollower = new TalonFX(Constants.shooterMotor1Id);
+    m_revAbsolute = new DutyCycleEncoder(Constants.hoodAbsoluteEncoder);
+    m_revAbsolute.setDistancePerRotation(200); //TODO Compute Correct Number
+
+    m_turretController = new TalonSRX(Constants.turretRingMotorId);
+    m_hoodController = new TalonSRX(Constants.hoodMotorId);
     
     m_shooterController.configFactoryDefault();
     m_shooterFollower.configFactoryDefault();
+
+    m_hoodController.configFactoryDefault();
+    m_hoodController.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, Constants.shooterTimeout);
+    //m_hoodController.setInverted(true);
+    m_hoodController.config_kP(0, Constants.hoodP);
+    m_hoodController.config_kI(0, Constants.hoodI);
+    m_hoodController.config_kD(0, Constants.hoodD);
+
+    m_hoodController.configNominalOutputForward(0, Constants.shooterTimeout);
+    m_hoodController.configNominalOutputReverse(0, Constants.shooterTimeout);
+    m_hoodController.configPeakOutputForward(1, Constants.shooterTimeout);
+    m_hoodController.configPeakOutputReverse(-1, Constants.shooterTimeout);
 
     m_shooterFollower.setInverted(true);
     m_shooterFollower.follow(m_shooterController);
@@ -62,13 +84,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.configVelocityMeasurementWindow(1);
     m_shooterController.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
 
-    m_turretController = new TalonSRX(Constants.turretRingMotorId);
-    m_hoodController = new TalonSRX(Constants.hoodMotorId);
+    
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Through Bore Encoder Value", m_revAbsolute.getDistance());
   }
 
   public void setShooter(double speed) {
@@ -81,7 +103,18 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setTurretSpeed(double horizontalSpeed, double verticalSpeed) {
     if (Constants.allowTurretPercentOutput) {
       m_turretController.set(ControlMode.PercentOutput, horizontalSpeed * Constants.turretCoefficient);
-      m_hoodController.set(ControlMode.PercentOutput, verticalSpeed * Constants.hoodCoefficient);
+     // m_hoodController.set(ControlMode.PercentOutput, verticalSpeed * Constants.hoodCoefficient);
     }
   }
-}
+
+  public void setHoodPosition (double position) {
+
+    m_hoodController.set(ControlMode.Position, position);
+    System.out.println("Setting Hood position... " + position);
+  }
+
+  public void setHoodOff () {
+    m_hoodController.set(ControlMode.PercentOutput, 0.0);
+    System.out.println("Hood Set Off");
+  }
+} 
