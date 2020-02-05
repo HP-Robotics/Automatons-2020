@@ -1,12 +1,14 @@
+X - Not priority
+
 Driving
 - (Done) Encoders - AMTs
 - RIO based Motion Profiling
 
 Autos
 - Cross auto line
-- Shoot 3 balls
-- Shoot 3 balls, intake at trench, and shoot.
-- Shoot 3 balls, take balls off bumps. [Bad idea because bumps]
+X Shoot 3 balls
+X Shoot 3 balls, intake at trench, and shoot.
+X Shoot 3 balls, take balls off bumps. [Bad idea because bumps]
 
 Intake
 - (Done) Run a motor
@@ -25,16 +27,16 @@ Shooter
 - Install Limelight (Hood or ring?)
 - PID control for automatic turret aim (Waiting on encoder fix)
 - Absolute position for turret (Through-bore encoder)
-- Hood control with a PID (Waiting on Motor install and gear install)
+- (Doing) Hood control with a PID (Waiting on Motor install and gear install)
 
 Climber
 * Awaiting design
 
 Control Panel
-- Design control panel manipulator
-- Have a camera or a color sensor
-- Run motor to turn wheel (maybe automatic with a PID)
-- Positional control (just turn wheel slowly until the color is reached)
+X Design control panel manipulator
+X Have a camera or a color sensor
+X Run motor to turn wheel (maybe automatic with a PID)
+X Positional control (just turn wheel slowly until the color is reached)
 
 Sensors
 - Limelight
