@@ -13,7 +13,6 @@ import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,12 +30,17 @@ public class ShooterSubsystem extends SubsystemBase {
   TalonSRX m_hoodController;
 
   DutyCycleEncoder m_revAbsolute;
+  Double m_offset;
+  int m_iterationCounter;
 
   public ShooterSubsystem() {
+    m_iterationCounter = 0;
+    m_offset = 0.0;
+
     m_shooterController = new TalonFX(Constants.shooterMotor2Id);
     m_shooterFollower = new TalonFX(Constants.shooterMotor1Id);
     m_revAbsolute = new DutyCycleEncoder(Constants.hoodAbsoluteEncoder);
-    m_revAbsolute.setDistancePerRotation(200); //TODO Compute Correct Number
+    m_revAbsolute.setDistancePerRotation(Constants.hoodAbsoluteToRelativeConversion); //TODO Compute Correct Number
 
     m_turretController = new TalonSRX(Constants.turretRingMotorId);
     m_hoodController = new TalonSRX(Constants.hoodMotorId);
@@ -46,7 +50,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_hoodController.configFactoryDefault();
     m_hoodController.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, Constants.shooterTimeout);
-    //m_hoodController.setInverted(true);
+    m_hoodController.setSensorPhase(true);
     m_hoodController.config_kP(0, Constants.hoodP);
     m_hoodController.config_kI(0, Constants.hoodI);
     m_hoodController.config_kD(0, Constants.hoodD);
@@ -91,6 +95,10 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Through Bore Encoder Value", m_revAbsolute.getDistance());
+    m_iterationCounter++;
+    if (m_iterationCounter % 15 == 0) {
+      m_offset = (double) m_hoodController.getSelectedSensorPosition() - m_revAbsolute.get();
+    }
   }
 
   public void setShooter(double speed) {
@@ -108,9 +116,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setHoodPosition (double position) {
-
-    m_hoodController.set(ControlMode.Position, position);
-    System.out.println("Setting Hood position... " + position);
+    m_hoodController.set(ControlMode.Position, position + m_offset);
+    System.out.println("Setting Hood position... " + position + m_offset);
   }
 
   public void setHoodOff () {

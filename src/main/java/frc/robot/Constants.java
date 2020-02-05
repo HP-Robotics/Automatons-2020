@@ -25,8 +25,9 @@ public final class Constants {
     public static final int rearLeftMotorID = 12;
     public static final int rearRightMotorID = 13;
 
-    public static final double washingMachineP = 0.01;
-    public static final double washingMachineI = 0.0002;
+    public static final double washingMachineP = 0.02;
+    // public static final double washingMachineI = 0.0002;
+    public static final double washingMachineI = 0.0;
     public static final double washingMachineD = 0.0;
     //public static final double washingMachineF = 0.15;
     public static final double washingMachineF = 0.0;
@@ -60,6 +61,10 @@ public final class Constants {
     public static final int turretClosedLoopSensor = 0;
     public static final int turretSensorTimeout = 100;
     public static final int turretAxis = 0;
+    public static final double hoodRelativeResolution = 44.4;
+    public static final double hoodAbsoluteResolution = 8192.0;
+    public static final double hoodRelativeToAbsoluteConversion = hoodAbsoluteResolution/hoodRelativeResolution;
+    public static final double hoodAbsoluteToRelativeConversion = hoodRelativeResolution/hoodAbsoluteResolution;
 
     public static final int turretRingMotorId = 20;
     public static final int hoodMotorId = 21;

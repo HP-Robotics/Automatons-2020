@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.Constants;
@@ -42,6 +43,9 @@ public class WashingMachineSubsystem extends SubsystemBase {
         spinnerMotor.config_kP(0, Constants.washingMachineP, Constants.washingMachineTimeout);
         spinnerMotor.config_kI(0, Constants.washingMachineI, Constants.washingMachineTimeout);
         spinnerMotor.config_kD(0, Constants.washingMachineD, Constants.washingMachineTimeout);
+
+        spinnerMotor.configVelocityMeasurementWindow(1);
+        spinnerMotor.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
     }
 
     @Override
