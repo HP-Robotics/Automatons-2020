@@ -40,7 +40,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController = new TalonFX(Constants.shooterMotor2Id);
     m_shooterFollower = new TalonFX(Constants.shooterMotor1Id);
     m_revAbsolute = new DutyCycleEncoder(Constants.hoodAbsoluteEncoder);
-    m_revAbsolute.setDistancePerRotation(Constants.hoodAbsoluteToRelativeConversion); //TODO Compute Correct Number
+    m_revAbsolute.setDistancePerRotation(Constants.hoodRelativeResolution); //TODO Compute Correct Number
 
     m_turretController = new TalonSRX(Constants.turretRingMotorId);
     m_hoodController = new TalonSRX(Constants.hoodMotorId);
@@ -97,7 +97,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Through Bore Encoder Value", m_revAbsolute.getDistance());
     m_iterationCounter++;
     if (m_iterationCounter % 15 == 0) {
-      m_offset = (double) m_hoodController.getSelectedSensorPosition() - m_revAbsolute.get();
+      m_offset = m_revAbsolute.get() - (double) m_hoodController.getSelectedSensorPosition();
     }
   }
 
