@@ -73,4 +73,11 @@ public final class Constants {
     public static final int shooterMotor2Id = 40;
 
     public static final double intakeSpeed = 0.75;
+
+
+    /* ########################################################## *
+     * #              ENTER THE REALM OF AUTONOMOUS             # *
+     * ########################################################## */
+
+    public static final double initAutoForwardTime = 1.5;
 }

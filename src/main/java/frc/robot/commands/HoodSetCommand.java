@@ -7,20 +7,22 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import java.util.function.DoubleSupplier;
 
-public class AutoCommandTest extends CommandBase {
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ShooterSubsystem;
+
+public class HoodSetCommand extends CommandBase {
   /**
-   * Creates a new ShootCommand.
+   * Creates a new HoodSetCommand.
    */
 
-  private final DriveSubsystem m_subsystem;
+  private final ShooterSubsystem m_subsystem;
+  DoubleSupplier m_target;
   
-  public AutoCommandTest(DriveSubsystem subsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public HoodSetCommand(ShooterSubsystem subsystem, DoubleSupplier target) {
     m_subsystem = subsystem;
-    addRequirements(m_subsystem);
+    m_target = target;
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +33,7 @@ public class AutoCommandTest extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("AutoTestCommand is being run.");
+    m_subsystem.setHoodPosition(m_target.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
@@ -44,5 +46,4 @@ public class AutoCommandTest extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-
 }

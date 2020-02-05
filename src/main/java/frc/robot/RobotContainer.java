@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.AutoCommandTest;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroDriveCommand;
 import frc.robot.commands.IntakeCommand;
@@ -55,6 +54,8 @@ public class RobotContainer {
 
   // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
 
+  private final Command m_initLineForwardAuto = new InstantCommand();
+
   
 
   
@@ -65,13 +66,15 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_autonomousChooser = new SendableChooser<Command>();
-    m_autonomousChooser.setDefaultOption("Test", new AutoCommandTest(m_driveSubsystem));
+    m_autonomousChooser.setDefaultOption("Test", new InstantCommand());
+    m_autonomousChooser.addOption("Init line forward", m_initLineForwardAuto);
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
+    
     SmartDashboard.putNumber("Hood Position", 0.0);
 
 
     m_stringChooser = new SendableChooser<String>();
-    //m_stringChooser.setDefaultOption("Default String", "Hi I am a string. 0");
+    m_stringChooser.setDefaultOption("Default String", "Hi I am a string. 0");
     m_stringChooser.addOption("String 1", "Hi I am a string. 1");
     m_stringChooser.addOption("String 2", "Hi I am a string. 2");
     m_stringChooser.addOption("String 3", "Hi I am a string. 3");
@@ -94,7 +97,7 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> m_driverStick.getRawAxis(1)));
     new JoystickButton(m_driverStick, 2).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_driverStick, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
-    new JoystickButton(m_driverStick, 5).whenPressed(new InstantCommand(() -> m_shooterSubsystem.setHoodPosition(SmartDashboard.getNumber("Hood Position", 0.0))));
+    new JoystickButton(m_driverStick, 5).whenPressed(() -> m_shooterSubsystem.setHoodPosition(SmartDashboard.getNumber("Hood Position", 0.0)));
     new JoystickButton(m_driverStick, 7).whenPressed(new InstantCommand(() -> m_shooterSubsystem.setHoodOff()));
   }
 
@@ -105,6 +108,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new InstantCommand();
+    if(m_autonomousChooser.getSelected() == null) {
+      return new InstantCommand();
+    } else {
+      return new InstantCommand();
+    }
   }
 }
