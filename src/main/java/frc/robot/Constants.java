@@ -65,6 +65,7 @@ public final class Constants {
     public static final double hoodAbsoluteResolution = 8192.0;
     public static final double hoodRelativeToAbsoluteConversion = hoodAbsoluteResolution/hoodRelativeResolution;
     public static final double hoodAbsoluteToRelativeConversion = hoodRelativeResolution/hoodAbsoluteResolution;
+    public static final double hoodAbsoluteOffset = 29.00;
 
     public static final int turretRingMotorId = 20;
     public static final int hoodMotorId = 21;

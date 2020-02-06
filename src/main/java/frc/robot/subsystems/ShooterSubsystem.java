@@ -30,7 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
   TalonSRX m_hoodController;
 
   DutyCycleEncoder m_revAbsolute;
-  Double m_offset;
+  double m_offset;
   int m_iterationCounter;
 
   public ShooterSubsystem() {
@@ -95,6 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Through Bore Encoder Value", m_revAbsolute.getDistance());
+    System.out.println("Tbe: " + m_revAbsolute.getDistance() + ", Jee: " + m_hoodController.getSelectedSensorPosition());
     m_iterationCounter++;
     if (m_iterationCounter % 15 == 0) {
       m_offset = m_revAbsolute.get() - (double) m_hoodController.getSelectedSensorPosition();
