@@ -61,11 +61,8 @@ public final class Constants {
     public static final int turretClosedLoopSensor = 0;
     public static final int turretSensorTimeout = 100;
     public static final int turretAxis = 0;
-    public static final double hoodRelativeResolution = 44.4;
-    public static final double hoodAbsoluteResolution = 8192.0;
-    public static final double hoodRelativeToAbsoluteConversion = hoodAbsoluteResolution/hoodRelativeResolution;
-    public static final double hoodAbsoluteToRelativeConversion = hoodRelativeResolution/hoodAbsoluteResolution;
-    public static final double hoodAbsoluteOffset = 29.00;
+    public static final double johnsonTicks = -177.6;
+    public static final double absZeroOffset = 116.8;
 
     public static final int turretRingMotorId = 20;
     public static final int hoodMotorId = 21;

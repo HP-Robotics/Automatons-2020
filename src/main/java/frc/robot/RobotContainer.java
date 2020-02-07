@@ -14,11 +14,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroDriveCommand;
+import frc.robot.commands.HoodOffCommand;
+import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.SpinUpCommand;
 import frc.robot.commands.SpinWasherCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WashingMachineSubsystem;
@@ -48,6 +51,8 @@ public class RobotContainer {
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
   private final WashingMachineSubsystem m_washingMachineSubsystem = new WashingMachineSubsystem();
+
+  private final HoodSubsystem m_hoodSubsystem = new HoodSubsystem();
 
   private final SendableChooser<Command> m_autonomousChooser;
   private final SendableChooser<String> m_stringChooser;
@@ -97,8 +102,8 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> m_driverStick.getRawAxis(1)));
     new JoystickButton(m_driverStick, 2).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_driverStick, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
-    new JoystickButton(m_driverStick, 5).whenPressed(() -> m_shooterSubsystem.setHoodPosition(SmartDashboard.getNumber("Hood Position", 0.0)));
-    new JoystickButton(m_driverStick, 7).whenPressed(new InstantCommand(() -> m_shooterSubsystem.setHoodOff()));
+    new JoystickButton(m_driverStick, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 0.0)));
+    new JoystickButton(m_driverStick, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
   }
 
   /**S

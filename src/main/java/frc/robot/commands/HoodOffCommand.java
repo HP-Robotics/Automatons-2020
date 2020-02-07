@@ -7,22 +7,19 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HoodSubsystem;
 
-public class HoodSetCommand extends CommandBase {
+public class HoodOffCommand extends CommandBase {
   /**
-   * Creates a new HoodSetCommand.
+   * Creates a new HoodOffCommand.
    */
 
   private final HoodSubsystem m_subsystem;
-  DoubleSupplier m_target;
-  
-  public HoodSetCommand(HoodSubsystem subsystem, DoubleSupplier target) {
+
+  public HoodOffCommand(HoodSubsystem subsystem) {
+    // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
-    m_target = target;
     addRequirements(m_subsystem);
   }
 
@@ -34,7 +31,7 @@ public class HoodSetCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setHoodPosition(m_target.getAsDouble());
+    m_subsystem.setHoodOff();
   }
 
   // Called once the command ends or is interrupted.
