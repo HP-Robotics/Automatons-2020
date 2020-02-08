@@ -45,10 +45,11 @@ X Color Sensor (?)
 - Webcam
 - (Done) 2x Encoders (Drivetrain)
 - 1x Encoder (Control Panel)
-- (Broken, need to be repaired) 1x Encoder (Turret Ring)
+- (Done! Repaired.) 1x Encoder (Turret Ring)
 - (Done) 1x Encoder (Hood Control)
 - 1x Encoder (Elevator Control)
 
 Programming Next Steps:
 - (Done?) Combine turret with Shooter
 - Turn SpinUpCommand into ShooterCommand
+- 
