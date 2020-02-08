@@ -28,6 +28,7 @@ Shooter
 - PID control for automatic turret aim (Waiting on encoder fix)
 - Absolute position for turret (Through-bore encoder)
 - (Doing) Hood control with a PID (Waiting on Motor install and gear install)
+    - RoboRIO WPI PID class with Absolute Encoder
 
 Climber
 * Awaiting design
