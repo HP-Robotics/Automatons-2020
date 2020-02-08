@@ -59,7 +59,9 @@ public class RobotContainer {
 
   // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
 
-  private final Command m_initLineForwardAuto = new InstantCommand();
+  private final Command m_initLineForwardAuto = new InstantCommand().andThen(
+    
+  );
 
   
 
