@@ -43,7 +43,9 @@ public class HoodSubsystem extends SubsystemBase {
     
     m_hoodController.configFactoryDefault();
     m_hoodController.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, Constants.shooterTimeout);
-    m_hoodController.setSensorPhase(true);
+    m_hoodController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
+    m_hoodController.setSensorPhase(false);
+    m_hoodController.setInverted(true);
     m_hoodController.config_kP(0, Constants.hoodP);
     m_hoodController.config_kI(0, Constants.hoodI);
     m_hoodController.config_kD(0, Constants.hoodD);
@@ -59,16 +61,19 @@ public class HoodSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Through Bore Encoder Value", m_revAbsolute.getDistance());
-    System.out.println("Tbe: " + m_revAbsolute.getDistance() + ", Jee: " + m_hoodController.getSelectedSensorPosition());
+    System.out.println("TBE: " + m_revAbsolute.getDistance() + ", VPE: " + m_hoodController.getSelectedSensorPosition());
+
+    /*
     m_iterationCounter++;
     if (m_iterationCounter % 15 == 0) {
       m_offset = -m_revAbsolute.getDistance() + m_hoodController.getSelectedSensorPosition() - Constants.absZeroOffset;
-    }
+    } */
     // System.out.println("Offset: " + m_offset);
   }
 
   public void setHoodPosition (double position) {
-
+    m_hoodController.set(ControlMode.Position, SmartDashboard.getNumber("Hood Position", m_hoodController.getSelectedSensorPosition()));
+    System.out.println("Hood Position set to " + SmartDashboard.getNumber("Hood Position", 0));
   }
 
   public void setHoodOff () {

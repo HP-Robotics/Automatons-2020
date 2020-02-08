@@ -14,7 +14,7 @@ public class IntakeSubsystem extends SubsystemBase {
   TalonSRX intakeMotor;
 
   public IntakeSubsystem() {
-      intakeMotor = new TalonSRX(40); //TODO - Discuss Intake CAN ID range
+      intakeMotor = new TalonSRX(Constants.intakeMotorId); //TODO - Discuss Intake CAN ID range
   }
 
   @Override
