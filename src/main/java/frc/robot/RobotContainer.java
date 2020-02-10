@@ -60,7 +60,7 @@ public class RobotContainer {
 
   // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
 
-  private final Command m_autoDriveForwardCommand = new AutoDriveForwardCommand(m_driveSubsystem).withTimeout(0.5);
+  private final Command m_autoDriveForwardCommand = new AutoDriveForwardCommand(m_driveSubsystem).withTimeout(4.5);
 
 
 
