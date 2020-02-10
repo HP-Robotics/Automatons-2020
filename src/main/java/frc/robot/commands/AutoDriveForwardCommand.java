@@ -20,6 +20,7 @@ public class AutoDriveForwardCommand extends CommandBase {
   public AutoDriveForwardCommand(DriveSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -30,14 +31,14 @@ public class AutoDriveForwardCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //m_subsystem.drive(0.25, 0.25);
+    m_subsystem.drive(0.25, 0.25);
     System.out.println("Goin' forward");
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //m_subsystem.drive(0, 0);
+    m_subsystem.drive(0, 0);
     System.out.println("Finished Going Forwards");
   }
 

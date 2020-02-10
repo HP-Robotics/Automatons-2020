@@ -61,7 +61,7 @@ public class HoodSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Through Bore Encoder Value", m_revAbsolute.getDistance());
-    System.out.println("TBE: " + m_revAbsolute.getDistance() + ", VPE: " + m_hoodController.getSelectedSensorPosition());
+    //System.out.println("TBE: " + m_revAbsolute.getDistance() + ", VPE: " + m_hoodController.getSelectedSensorPosition());
 
     /*
     m_iterationCounter++;
