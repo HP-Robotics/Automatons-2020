@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.AutoDriveForwardCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroDriveCommand;
 import frc.robot.commands.HoodOffCommand;
@@ -59,13 +60,9 @@ public class RobotContainer {
 
   // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
 
-  private final Command m_initLineForwardAuto = new InstantCommand().andThen(
-    
-  );
+  private final Command m_autoDriveForwardCommand = new AutoDriveForwardCommand(m_driveSubsystem).withTimeout(0.5);
 
-  
 
-  
 
 
   /**
@@ -73,8 +70,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_autonomousChooser = new SendableChooser<Command>();
-    m_autonomousChooser.setDefaultOption("Test", new InstantCommand());
-    m_autonomousChooser.addOption("Init line forward", m_initLineForwardAuto);
+    m_autonomousChooser.setDefaultOption("InstantCommand", new InstantCommand());
+    m_autonomousChooser.addOption("Init line forward", m_autoDriveForwardCommand);
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
     
     SmartDashboard.putNumber("Hood Position", 0.0);
@@ -108,7 +105,7 @@ public class RobotContainer {
     new JoystickButton(m_driverStick, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
   }
 
-  /**S
+  /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
@@ -118,7 +115,7 @@ public class RobotContainer {
     if(m_autonomousChooser.getSelected() == null) {
       return new InstantCommand();
     } else {
-      return new InstantCommand();
+      return m_autonomousChooser.getSelected();
     }
   }
 }
