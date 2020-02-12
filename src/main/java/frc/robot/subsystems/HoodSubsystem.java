@@ -33,22 +33,23 @@ public class HoodSubsystem extends SubsystemBase {
     m_iterationCounter = 0;
     m_offset = 0.0;
 
-    m_revAbsolute = new DutyCycleEncoder(Constants.hoodAbsoluteEncoder);
-    m_revAbsolute.reset();
-    m_revAbsolute.setDistancePerRotation(Constants.johnsonTicks);
+    // m_revAbsolute = new DutyCycleEncoder(Constants.hoodAbsoluteEncoder);
+    // m_revAbsolute.reset();
+    // m_revAbsolute.setDistancePerRotation(Constants.johnsonTicks);
 
     m_hoodController = new TalonSRX(Constants.hoodMotorId);
     m_PidController = new PIDController(Constants.hoodP, Constants.hoodI, Constants.hoodD);
 
     
     m_hoodController.configFactoryDefault();
-    m_hoodController.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, Constants.shooterTimeout);
-    m_hoodController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
+    m_hoodController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, Constants.shooterTimeout);
     m_hoodController.setSensorPhase(false);
-    m_hoodController.setInverted(true);
+    m_hoodController.setInverted(false);
     m_hoodController.config_kP(0, Constants.hoodP);
     m_hoodController.config_kI(0, Constants.hoodI);
     m_hoodController.config_kD(0, Constants.hoodD);
+    m_hoodController.config_IntegralZone(0, Constants.hoodIntegralZone);
+    m_hoodController.configClosedloopRamp(Constants.hoodRamp);
     
     m_hoodController.configNominalOutputForward(0, Constants.shooterTimeout);
     m_hoodController.configNominalOutputReverse(0, Constants.shooterTimeout);
@@ -60,7 +61,7 @@ public class HoodSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Through Bore Encoder Value", m_revAbsolute.getDistance());
+    // SmartDashboard.putNumber("Through Bore Encoder Value", m_revAbsolute.getDistance());
     //System.out.println("TBE: " + m_revAbsolute.getDistance() + ", VPE: " + m_hoodController.getSelectedSensorPosition());
 
     /*
@@ -69,6 +70,7 @@ public class HoodSubsystem extends SubsystemBase {
       m_offset = -m_revAbsolute.getDistance() + m_hoodController.getSelectedSensorPosition() - Constants.absZeroOffset;
     } */
     // System.out.println("Offset: " + m_offset);
+    System.out.println(m_hoodController.getSelectedSensorPosition(0));
   }
 
   public void setHoodPosition (double position) {
