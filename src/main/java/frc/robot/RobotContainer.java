@@ -40,14 +40,15 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
-  private final Joystick m_driverStick = new Joystick(0); //TODO - split into two controllers, use constants.
-  private final Joystick m_operatorStick = new Joystick(1);
+  private final Joystick m_driverStickLeft = new Joystick(0); //TODO - split into two controllers, use constants.
+  private final Joystick m_driverStickRight = new Joystick(1);
+  private final Joystick m_operatorStick = new Joystick(2);
 
-  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> m_driverStick.getRawAxis(1), () -> m_driverStick.getRawAxis(3));
+  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> m_driverStickLeft.getRawAxis(1), () -> m_driverStickRight.getRawAxis(3));
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
-  private final TurretCommand m_turretCommand = new TurretCommand(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0), () -> m_operatorStick.getRawAxis(1));
+  private final TurretCommand m_turretCommand = new TurretCommand(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0));
 
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
@@ -97,12 +98,12 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverStick, 4).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
-    new JoystickButton(m_driverStick, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> m_driverStick.getRawAxis(1)));
-    new JoystickButton(m_driverStick, 2).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
-    new JoystickButton(m_driverStick, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
-    new JoystickButton(m_driverStick, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 0.0)));
-    new JoystickButton(m_driverStick, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
+    new JoystickButton(m_driverStickLeft, 4).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
+    new JoystickButton(m_driverStickLeft, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> m_driverStickLeft.getRawAxis(1)));
+    new JoystickButton(m_driverStickLeft, 2).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
+    new JoystickButton(m_driverStickLeft, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
+    new JoystickButton(m_driverStickLeft, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 0.0)));
+    new JoystickButton(m_driverStickLeft, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
   }
 
   /**

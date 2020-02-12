@@ -62,12 +62,15 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.configVelocityMeasurementWindow(1);
     m_shooterController.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
 
-    
+    m_turretController.configFactoryDefault();
+    m_turretController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, Constants.shooterTimeout);
+    m_turretController.config_kP(0, 0.1);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(m_shooterController.getMotorOutputPercent() + " Percent, " + m_shooterController.getSupplyCurrent() + " Supply, " + m_shooterController.getStatorCurrent() + " Stator");
     
   }
 
@@ -83,5 +86,17 @@ public class ShooterSubsystem extends SubsystemBase {
       m_turretController.set(ControlMode.PercentOutput, horizontalSpeed * Constants.turretCoefficient);
      // m_hoodController.set(ControlMode.PercentOutput, verticalSpeed * Constants.hoodCoefficient);
     }
+  }
+
+  public void disableTurret() {
+    m_turretController.set(ControlMode.PercentOutput, 0);
+  }
+
+  public void setTurretAngle(int angle) {
+    m_turretController.set(ControlMode.Position, angle);
+  }
+
+  public void setManualTurretAngle(int difference) {
+    m_turretController.set(ControlMode.Position, m_turretController.getSelectedSensorPosition() + difference);
   }
 } 

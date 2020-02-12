@@ -23,10 +23,9 @@ public class TurretCommand extends CommandBase {
   DoubleSupplier m_turretSpeed;
   DoubleSupplier m_hoodSpeed;
 
-  public TurretCommand(ShooterSubsystem subsystem, DoubleSupplier horizontal, DoubleSupplier vertical) {
+  public TurretCommand(ShooterSubsystem subsystem, DoubleSupplier horizontal) {
     m_subsystem = subsystem;
     m_turretSpeed = horizontal;
-    m_hoodSpeed = vertical;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -39,7 +38,7 @@ public class TurretCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setTurretSpeed(m_turretSpeed.getAsDouble(), m_hoodSpeed.getAsDouble());
+    m_subsystem.setManualTurretAngle((int) m_turretSpeed.getAsDouble() * 50);
   }
 
   // Called once the command ends or is interrupted.
