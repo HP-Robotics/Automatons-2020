@@ -47,7 +47,7 @@ public final class Constants {
     public static final double shooterFullspeed = 15000.0;
     public static final double shooterOff = 0.0;
 
-    public static final boolean allowTurretPercentOutput = true; // TODO FIX THIS
+    public static final boolean turretSafetyDisabled = false; // TODO FIX THIS
     public static final double turretCoefficient = 0.5;
     public static final double hoodCoefficient = 1;
     public static final double turretOff = 0.0;

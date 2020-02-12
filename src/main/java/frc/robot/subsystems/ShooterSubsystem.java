@@ -82,7 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setTurretSpeed(double horizontalSpeed, double verticalSpeed) {
-    if (Constants.allowTurretPercentOutput) {
+    if (Constants.turretSafetyDisabled) {
       m_turretController.set(ControlMode.PercentOutput, horizontalSpeed * Constants.turretCoefficient);
      // m_hoodController.set(ControlMode.PercentOutput, verticalSpeed * Constants.hoodCoefficient);
     }
@@ -97,6 +97,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setManualTurretAngle(int difference) {
-    m_turretController.set(ControlMode.Position, m_turretController.getSelectedSensorPosition() + difference);
+    if (Constants.turretSafetyDisabled) {
+      m_turretController.set(ControlMode.Position, m_turretController.getSelectedSensorPosition() + difference);
+    }
   }
 } 

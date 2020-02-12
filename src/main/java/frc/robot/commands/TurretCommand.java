@@ -44,7 +44,7 @@ public class TurretCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setTurretSpeed(Constants.turretOff, Constants.hoodOff);
+    m_subsystem.disableTurret();
   }
 
   // Returns true when the command should end.
