@@ -70,7 +70,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(m_shooterController.getMotorOutputPercent() + " Percent, " + m_shooterController.getSupplyCurrent() + " Supply, " + m_shooterController.getStatorCurrent() + " Stator");
+    // System.out.println(m_shooterController.getMotorOutputPercent() + " Percent, " + m_shooterController.getSupplyCurrent() + " Supply, " + m_shooterController.getStatorCurrent() + " Stator");
     
   }
 

@@ -12,13 +12,13 @@ import frc.robot.subsystems.WashingMachineSubsystem;
 
 import frc.robot.Constants;
 
-public class SpinWasherCommand extends CommandBase {
+public class ReverseWasherCommand extends CommandBase {
 
   public final WashingMachineSubsystem m_subsystem;
   /**
-   * Creates a new SpinWasherCommand.
+   * Creates a new ReverseWasherCommand.
    */
-  public SpinWasherCommand(WashingMachineSubsystem subsystem) {
+  public ReverseWasherCommand(WashingMachineSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     addRequirements(m_subsystem);
@@ -27,7 +27,7 @@ public class SpinWasherCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setVelocity(Constants.washingMachineSpeed, Constants.intakeSpeed);
+    m_subsystem.setVelocity(-Constants.washingMachineSpeed, Constants.uptakeReverse);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,7 +38,7 @@ public class SpinWasherCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setVelocity(Constants.washingMachineOff, Constants.intakeSpeed);
+    m_subsystem.setVelocity(Constants.washingMachineOff, Constants.washingMachineOff);
   }
 
   // Returns true when the command should end.

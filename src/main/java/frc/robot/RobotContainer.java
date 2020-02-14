@@ -18,6 +18,7 @@ import frc.robot.commands.GyroDriveCommand;
 import frc.robot.commands.HoodOffCommand;
 import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ReverseWasherCommand;
 import frc.robot.commands.TurretCommand;
 import frc.robot.commands.SpinUpCommand;
 import frc.robot.commands.SpinWasherCommand;
@@ -98,12 +99,13 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverStickLeft, 4).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
-    new JoystickButton(m_driverStickLeft, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> m_driverStickLeft.getRawAxis(1)));
-    new JoystickButton(m_driverStickLeft, 2).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
-    new JoystickButton(m_driverStickLeft, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
-    new JoystickButton(m_driverStickLeft, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 0.0)));
-    new JoystickButton(m_driverStickLeft, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
+    //new JoystickButton(m_driverStickLeft, 4).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
+    // new JoystickButton(m_driverStickLeft, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> m_driverStickLeft.getRawAxis(1)));
+    // new JoystickButton(m_operatorStick, 1).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
+    new JoystickButton(m_operatorStick, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
+    new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem));
+    //new JoystickButton(m_driverStickLeft, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 0.0)));
+    //new JoystickButton(m_driverStickLeft, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
   }
 
   /**

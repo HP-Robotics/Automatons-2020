@@ -13,9 +13,11 @@ import frc.robot.Constants;
 public class WashingMachineSubsystem extends SubsystemBase {
 
   private final TalonSRX spinnerMotor;
+  private final TalonSRX uptakeMotor;
 
     public WashingMachineSubsystem() {
         spinnerMotor = new TalonSRX(Constants.washingMachineMotorId);
+        uptakeMotor = new TalonSRX(Constants.uptakeMotorId);
 
         spinnerMotor.configFactoryDefault();
         spinnerMotor.configSupplyCurrentLimit(
@@ -60,10 +62,14 @@ public class WashingMachineSubsystem extends SubsystemBase {
          */
     }
 
-    public void setVelocity(final double velocity) {
-    if (velocity == 0.0)
+    public void setVelocity(final double velocity, final double uptakeOutput) {
+      if (velocity == 0.0) {
         spinnerMotor.set(ControlMode.PercentOutput, 0.0);
-    else
+        uptakeMotor.set(ControlMode.PercentOutput, 0.0);
+      }
+      else {
         spinnerMotor.set(ControlMode.Velocity, velocity);
-  }
+        uptakeMotor.set(ControlMode.PercentOutput, uptakeOutput);
+      }
+    }
 }

@@ -32,7 +32,7 @@ public final class Constants {
     //public static final double washingMachineF = 0.15;
     public static final double washingMachineF = 0.0;
     public static final int washingMachineTimeout = 30;
-    public static final double washingMachineSpeed = -20000.0;
+    public static final double washingMachineSpeed = -40000.0;
     public static final double washingMachineOff = 0.0;
     public static final int washingMachinePDPChannel = 13;
     public static final double washingMachineMaxCurrent = 18.0;
@@ -72,11 +72,13 @@ public final class Constants {
     public static final int turretRingMotorId = 20;
     public static final int hoodMotorId = 21;
     public static final int washingMachineMotorId = 30;
+    public static final int uptakeMotorId = 50; // 31
     public static final int shooterMotor1Id = 41;
     public static final int shooterMotor2Id = 40;
     public static final int intakeMotorId = 50;
 
-    public static final double intakeSpeed = 0.75;
+    public static final double intakeSpeed = -0.75;
+    public static final double uptakeReverse = 0.25;
 
 
     /* ########################################################### *
