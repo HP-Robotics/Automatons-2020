@@ -74,8 +74,14 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public void setHoodPosition (double position) {
-    m_hoodController.set(ControlMode.Position, SmartDashboard.getNumber("Hood Position", m_hoodController.getSelectedSensorPosition()));
+    m_hoodController.set(ControlMode.Position, position);
     System.out.println("Hood Position set to " + SmartDashboard.getNumber("Hood Position", 0));
+  }
+
+  public void setHoodPositionManual (double difference) {
+    if (Constants.turretSafetyDisabled) {
+      m_hoodController.set(ControlMode.Position, m_hoodController.getSelectedSensorPosition() + difference);
+    }
   }
 
   public void setHoodOff () {

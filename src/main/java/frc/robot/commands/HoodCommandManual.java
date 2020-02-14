@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,26 +7,23 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.ShooterSubsystem;
-
 import java.util.function.DoubleSupplier;
 
-/**
- * An example command that uses an example subsystem.
- */
-public class TurretCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ShooterSubsystem m_subsystem;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.HoodSubsystem;
 
-  DoubleSupplier m_turretSpeed;
-  DoubleSupplier m_hoodSpeed;
+public class HoodCommandManual extends CommandBase {
+  /**
+   * Creates a new HoodCommandManual.
+   */
 
-  public TurretCommand(ShooterSubsystem subsystem, DoubleSupplier horizontal) {
-    m_subsystem = subsystem;
-    m_turretSpeed = horizontal;
+  private HoodSubsystem m_subsystem;
+  private DoubleSupplier m_vertical;
+  
+  public HoodCommandManual(HoodSubsystem subsystem, DoubleSupplier vertical) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_subsystem = subsystem;
+    m_vertical = vertical;
     addRequirements(subsystem);
   }
 
@@ -38,13 +35,12 @@ public class TurretCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setManualTurretAngle((int) m_turretSpeed.getAsDouble() * 50);
+    m_subsystem.setHoodPosition((int) m_vertical.getAsDouble() * 50);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.disableTurret();
   }
 
   // Returns true when the command should end.

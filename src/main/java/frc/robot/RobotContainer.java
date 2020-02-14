@@ -19,7 +19,7 @@ import frc.robot.commands.HoodOffCommand;
 import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ReverseWasherCommand;
-import frc.robot.commands.TurretCommand;
+import frc.robot.commands.TurretCommandManual;
 import frc.robot.commands.SpinUpCommand;
 import frc.robot.commands.SpinWasherCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -49,7 +49,7 @@ public class RobotContainer {
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
-  private final TurretCommand m_turretCommand = new TurretCommand(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0));
+  private final TurretCommandManual m_turretCommand = new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0));
 
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
