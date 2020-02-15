@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,26 +7,20 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.Constants;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class HoodCommandManual extends CommandBase {
-  /**
-   * Creates a new HoodCommandManual.
-   */
+/**
+ * An example command that uses an example subsystem.
+ */
+public class TurretOffCommand extends CommandBase {
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  private final ShooterSubsystem m_subsystem;
 
-  private final HoodSubsystem m_subsystem;
-  private final int m_reverse;
-  
-  public HoodCommandManual(HoodSubsystem subsystem, boolean reverse) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public TurretOffCommand(ShooterSubsystem subsystem, boolean reverse) {
     m_subsystem = subsystem;
-    if(reverse)
-      m_reverse = -1;
-    else
-      m_reverse = 1;
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
@@ -38,7 +32,7 @@ public class HoodCommandManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setHoodPositionManual(m_reverse * 50);
+    m_subsystem.disableTurret();
   }
 
   // Called once the command ends or is interrupted.

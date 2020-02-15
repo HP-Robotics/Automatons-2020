@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveForwardCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GyroDriveCommand;
+import frc.robot.commands.HoodCommandManual;
 import frc.robot.commands.HoodOffCommand;
 import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.WashingMachineSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -48,8 +50,6 @@ public class RobotContainer {
   private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> m_driverStickLeft.getRawAxis(1), () -> m_driverStickRight.getRawAxis(3));
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-
-  private final TurretCommandManual m_turretCommand = new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0));
 
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
@@ -88,7 +88,6 @@ public class RobotContainer {
     SmartDashboard.putData("Choose a string", m_stringChooser);
 
     m_driveSubsystem.setDefaultCommand(m_tankDrive);
-    m_shooterSubsystem.setDefaultCommand(m_turretCommand);
     configureButtonBindings();
   }
 
@@ -104,6 +103,11 @@ public class RobotContainer {
     // new JoystickButton(m_operatorStick, 1).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_operatorStick, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem));
+    new Trigger(this::getUp).whenActive(new HoodCommandManual(m_hoodSubsystem, false));
+    new Trigger(this::getDown).whenActive(new HoodCommandManual(m_hoodSubsystem, true));
+    new Trigger(this::getLeft).whenActive(new TurretCommandManual(m_shooterSubsystem, false));
+    new Trigger(this::getRight).whenActive(new TurretCommandManual(m_shooterSubsystem, true));
+
     //new JoystickButton(m_driverStickLeft, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 0.0)));
     //new JoystickButton(m_driverStickLeft, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
   }
@@ -120,5 +124,21 @@ public class RobotContainer {
     } else {
       return m_autonomousChooser.getSelected();
     }
+  }
+
+  public boolean getUp() {
+    return m_operatorStick.getPOV() == 0;      
+  }
+
+  public boolean getDown() {
+    return m_operatorStick.getPOV() == 4;      
+  }
+  
+  public boolean getLeft() {
+    return m_operatorStick.getPOV() == 6;      
+  }
+
+  public boolean getRight() {
+    return m_operatorStick.getPOV() == 2;      
   }
 }
