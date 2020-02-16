@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -60,6 +61,7 @@ public class WashingMachineSubsystem extends SubsystemBase {
          * System.out.println("Current draw: " +
          * pdp.getCurrent(Constants.washingMachinePDPChannel)); }
          */
+        SmartDashboard.putNumber("Wash Velocity", spinnerMotor.getSelectedSensorVelocity());
     }
 
     public void setVelocity(final double velocity, final double uptakeOutput) {

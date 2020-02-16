@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -9,32 +9,25 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.LifterSubsystem;
 
-import java.util.function.DoubleSupplier;
+public class DriveWinchCommand extends CommandBase {
+  /**
+   * Creates a new DriveWinchCommand.
+   */
 
-/**
- * An example command that uses an example subsystem.
- */
-public class TurretCommandManual extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ShooterSubsystem m_subsystem;
-  private final int m_reverse;
+  private final LifterSubsystem m_subsystem;
 
-  public TurretCommandManual(ShooterSubsystem subsystem, boolean reverse) {
+  public DriveWinchCommand(LifterSubsystem subsystem) {
     m_subsystem = subsystem;
-    if(reverse)
-      m_reverse = -1;
-    else
-      m_reverse = 1;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setManualTurretAngle(m_reverse * Constants.turretMovement);
+    m_subsystem.driveWinch(Constants.winchSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,6 +38,7 @@ public class TurretCommandManual extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_subsystem.driveWinch(Constants.winchStop);
   }
 
   // Returns true when the command should end.

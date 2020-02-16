@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveForwardCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveWinchCommand;
 import frc.robot.commands.GyroDriveCommand;
 import frc.robot.commands.HoodCommandManual;
 import frc.robot.commands.HoodOffCommand;
@@ -26,6 +27,7 @@ import frc.robot.commands.SpinWasherCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LifterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WashingMachineSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,7 +49,7 @@ public class RobotContainer {
   private final Joystick m_driverStickRight = new Joystick(1);
   private final Joystick m_operatorStick = new Joystick(2);
 
-  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> m_driverStickLeft.getRawAxis(1), () -> m_driverStickRight.getRawAxis(3));
+  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1), () -> -m_driverStickRight.getRawAxis(1));
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
@@ -57,12 +59,14 @@ public class RobotContainer {
 
   private final HoodSubsystem m_hoodSubsystem = new HoodSubsystem();
 
+  private final LifterSubsystem m_lifterSubsystem = new LifterSubsystem();
+
   private final SendableChooser<Command> m_autonomousChooser;
   private final SendableChooser<String> m_stringChooser;
 
   // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
 
-  private final Command m_autoDriveForwardCommand = new AutoDriveForwardCommand(m_driveSubsystem).withTimeout(4.5);
+  private final Command m_autoDriveForwardCommand = new AutoDriveForwardCommand(m_driveSubsystem).withTimeout(2);
 
 
 
@@ -72,8 +76,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_autonomousChooser = new SendableChooser<Command>();
-    m_autonomousChooser.setDefaultOption("InstantCommand", new InstantCommand());
-    m_autonomousChooser.addOption("Init line forward", m_autoDriveForwardCommand);
+    m_autonomousChooser.setDefaultOption("Init line forward", m_autoDriveForwardCommand);
+    m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
     
     SmartDashboard.putNumber("Hood Position", 0.0);
@@ -98,18 +102,20 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //new JoystickButton(m_driverStickLeft, 4).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
-    // new JoystickButton(m_driverStickLeft, 3).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> m_driverStickLeft.getRawAxis(1)));
-    // new JoystickButton(m_operatorStick, 1).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
-    new JoystickButton(m_operatorStick, 1).toggleWhenPressed(new SpinWasherCommand(m_washingMachineSubsystem)); 
+    new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
+    new JoystickButton(m_driverStickLeft, 2).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1)));
+    new JoystickButton(m_driverStickRight, 1).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
+    new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem)); 
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem));
-    new Trigger(this::getUp).whenActive(new HoodCommandManual(m_hoodSubsystem, false));
-    new Trigger(this::getDown).whenActive(new HoodCommandManual(m_hoodSubsystem, true));
-    new Trigger(this::getLeft).whenActive(new TurretCommandManual(m_shooterSubsystem, false));
-    new Trigger(this::getRight).whenActive(new TurretCommandManual(m_shooterSubsystem, true));
+    new Trigger(this::getUp).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, false));
+    new Trigger(this::getDown).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, true));
+    new Trigger(this::getLeft).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, false));
+    new Trigger(this::getRight).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, true));
 
-    //new JoystickButton(m_driverStickLeft, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 0.0)));
-    //new JoystickButton(m_driverStickLeft, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
+    new JoystickButton(m_operatorStick, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 400.0)));
+    new JoystickButton(m_operatorStick, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
+
+    new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem));
   }
 
   /**
@@ -127,18 +133,26 @@ public class RobotContainer {
   }
 
   public boolean getUp() {
-    return m_operatorStick.getPOV() == 0;      
+    // if(Math.abs(m_operatorStick.getPOV()) <= 45 && m_operatorStick.getPOV() != -1)
+    //   System.out.println("UP");
+    return Math.abs(m_operatorStick.getPOV()) <= 45 && m_operatorStick.getPOV() != -1;   
   }
 
   public boolean getDown() {
-    return m_operatorStick.getPOV() == 4;      
+    // if(Math.abs(m_operatorStick.getPOV() - 180) <= 45)
+    //   System.out.println("DOWN");
+    return Math.abs(m_operatorStick.getPOV() - 180) <= 45;    
   }
   
   public boolean getLeft() {
-    return m_operatorStick.getPOV() == 6;      
+    // if(Math.abs(m_operatorStick.getPOV() - 270) <= 45)
+    //   System.out.println("LEFT");
+    return Math.abs(m_operatorStick.getPOV() - 270) <= 45;
   }
 
   public boolean getRight() {
-    return m_operatorStick.getPOV() == 2;      
+    // if(Math.abs(m_operatorStick.getPOV() - 90) <= 45)
+    //   System.out.println("Right");
+    return Math.abs(m_operatorStick.getPOV() - 90) <= 45;    
   }
 }

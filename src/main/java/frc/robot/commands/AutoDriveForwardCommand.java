@@ -31,7 +31,7 @@ public class AutoDriveForwardCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(0.25, 0.25);
+    m_subsystem.drive(0.5, 0.5);
     System.out.println("Goin' forward");
   }
 

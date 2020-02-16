@@ -42,7 +42,8 @@ public class HoodSubsystem extends SubsystemBase {
 
     
     m_hoodController.configFactoryDefault();
-    m_hoodController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, Constants.shooterTimeout);
+    m_hoodController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.shooterTimeout);
+    m_hoodController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
     m_hoodController.setSensorPhase(false);
     m_hoodController.setInverted(false);
     m_hoodController.config_kP(0, Constants.hoodP);
@@ -70,7 +71,14 @@ public class HoodSubsystem extends SubsystemBase {
       m_offset = -m_revAbsolute.getDistance() + m_hoodController.getSelectedSensorPosition() - Constants.absZeroOffset;
     } */
     // System.out.println("Offset: " + m_offset);
-    // System.out.println(m_hoodController.getSelectedSensorPosition(0));
+    System.out.println("Target: " + m_hoodController.getClosedLoopTarget(0) + " Position: " + m_hoodController.getSelectedSensorPosition(0) + " Error: " + m_hoodController.getClosedLoopError(0));
+    if(m_hoodController.getControlMode() == ControlMode.Position) {
+      if(m_hoodController.getClosedLoopTarget(0) >= 0)
+        m_hoodController.set(ControlMode.Position, 0);
+      if(m_hoodController.getClosedLoopTarget(0) <= -675)
+        m_hoodController.set(ControlMode.Position, -675);
+    }
+
   }
 
   public void setHoodPosition (double position) {
@@ -80,7 +88,7 @@ public class HoodSubsystem extends SubsystemBase {
 
   public void setHoodPositionManual (double difference) {
     if (Constants.turretSafetyDisabled) {
-      m_hoodController.set(ControlMode.Position, m_hoodController.getSelectedSensorPosition() + difference);
+      m_hoodController.set(ControlMode.Position, m_hoodController.getClosedLoopTarget(0) + difference);
     }
   }
 
