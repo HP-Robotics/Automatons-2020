@@ -30,6 +30,8 @@ Shooter
 - (Doing) Hood control with a PID (Waiting on Motor install and gear install)
     - RoboRIO WPI PID class with Absolute Encoder
 
+- ****************************************************SEPARATE THE TURRET!!!!!!!!!!!!!!!!!!!!!!!!!!**************************************************************
+
 Climber
 * Awaiting design
 

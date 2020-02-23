@@ -9,10 +9,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,19 +29,20 @@ public class ShooterSubsystem extends SubsystemBase {
   TalonSRX m_turretController;
 
   public ShooterSubsystem() {
-    m_shooterController = new TalonFX(Constants.shooterMotor2Id);
-    m_shooterFollower = new TalonFX(Constants.shooterMotor1Id);
+    m_shooterController = new TalonFX(Constants.shooterMotor1Id);
+    m_shooterFollower = new TalonFX(Constants.shooterMotor2Id);
     m_turretController = new TalonSRX(Constants.turretRingMotorId);
     
     m_shooterController.configFactoryDefault();
     m_shooterFollower.configFactoryDefault();
 
     m_shooterFollower.setInverted(true);
-    m_shooterFollower.follow(m_shooterController);
 
     /* Config sensor used for Primary PID [Velocity] */
     m_shooterController.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0,
             Constants.shooterTimeout);
+    m_shooterFollower.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, Constants.shooterTimeout);
+
 
     /**
      * Phase sensor accordingly. Positive Sensor Reading should match Green
@@ -52,15 +55,29 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.configPeakOutputForward(1, Constants.shooterTimeout);
     m_shooterController.configPeakOutputReverse(-1, Constants.shooterTimeout);
 
+    m_shooterFollower.configNominalOutputForward(0, Constants.shooterTimeout);
+    m_shooterFollower.configNominalOutputReverse(0, Constants.shooterTimeout);
+    m_shooterFollower.configPeakOutputForward(1, Constants.shooterTimeout);
+    m_shooterFollower.configPeakOutputReverse(-1, Constants.shooterTimeout);
+
     /* Config the Velocity closed loop gains in slot0 */
     m_shooterController.config_kF(0, Constants.shooterF, Constants.shooterTimeout);
     m_shooterController.config_kP(0, Constants.shooterP, Constants.shooterTimeout);
     m_shooterController.config_kI(0, Constants.shooterI, Constants.shooterTimeout);
     m_shooterController.config_kD(0, Constants.shooterD, Constants.shooterTimeout);
 
+    m_shooterFollower.config_kF(0, Constants.shooterF, Constants.shooterTimeout);
+    m_shooterFollower.config_kP(0, Constants.shooterP, Constants.shooterTimeout);
+    m_shooterFollower.config_kI(0, 0, Constants.shooterTimeout);
+    m_shooterFollower.config_kD(0, Constants.shooterD, Constants.shooterTimeout);
+
     m_shooterController.config_IntegralZone(0, 1000);
     m_shooterController.configVelocityMeasurementWindow(1);
     m_shooterController.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
+
+    m_shooterFollower.config_IntegralZone(0, 1000);
+    m_shooterFollower.configVelocityMeasurementWindow(1);
+    m_shooterFollower.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
 
     m_turretController.configFactoryDefault();
     m_turretController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, Constants.shooterTimeout);
@@ -70,15 +87,20 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(m_shooterController.getMotorOutputPercent() + " Percent, " + m_shooterController.getSupplyCurrent() + " Supply, " + m_shooterController.getStatorCurrent() + " Stator");
-    
+    SmartDashboard.putBoolean("Shooter Spinning: ", m_shooterController.getSelectedSensorVelocity() != 0);
+    SmartDashboard.putNumber("Shooter Speed: ", m_shooterController.getSelectedSensorVelocity());
+    SmartDashboard.putBoolean("Shooter Commanded: ", m_shooterController.getClosedLoopTarget() != 0);
+
   }
 
   public void setShooter(double speed) {
-    if(speed == 0.0)
+    if(speed == 0.0) {
       m_shooterController.set(ControlMode.PercentOutput, 0.0);
-    else
+      m_shooterFollower.set(ControlMode.PercentOutput, 0.0);
+    } else{
       m_shooterController.set(ControlMode.Velocity, speed);
+      m_shooterFollower.set(ControlMode.PercentOutput, 0.0);
+    }
   }
 
   public void setTurretSpeed(double horizontalSpeed, double verticalSpeed) {

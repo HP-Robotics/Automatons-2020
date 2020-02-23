@@ -32,19 +32,19 @@ public final class Constants {
     //public static final double washingMachineF = 0.15;
     public static final double washingMachineF = 0.0;
     public static final int washingMachineTimeout = 30;
-    public static final double washingMachineSpeed = -20000.0;
+    public static final double washingMachineSpeed = -32500.0;
     public static final double washingMachineOff = 0.0;
     public static final int washingMachinePDPChannel = 13;
     public static final double washingMachineMaxCurrent = 18.0;
     public static final double washingMachineLimitedCurrent = 5.0;
     public static final double washingMachineThresholdTime = 2.0;
 
-    public static final double shooterP = 1;
+    public static final double shooterP = 1; 
     public static final double shooterI = 0.005;
     public static final double shooterD = 1;
     public static final double shooterF = 0;
     public static final int shooterTimeout = 30;
-    public static final double shooterFullspeed = 15000.0;
+    public static final double shooterFullspeed = 13000.0;
     public static final double shooterOff = 0.0;
 
     public static final boolean turretSafetyDisabled = true; // TODO FIX THIS
@@ -66,7 +66,7 @@ public final class Constants {
     public static final int turretClosedLoopSensor = 0;
     public static final int turretSensorTimeout = 100;
     public static final int turretAxis = 0;
-    public static final int hoodMovement = 50;
+    public static final int hoodMovement = 25;
     public static final int turretMovement = 50;
     public static final double johnsonTicks = -177.6;
     public static final double absZeroOffset = 116.8;
@@ -75,8 +75,8 @@ public final class Constants {
     public static final int hoodMotorId = 21;
     public static final int washingMachineMotorId = 30;
     public static final int uptakeMotorId = 31; // 31
-    public static final int shooterMotor1Id = 41;
-    public static final int shooterMotor2Id = 40;
+    public static final int shooterMotor1Id = 40;
+    public static final int shooterMotor2Id = 41;
     public static final int intakeMotorId = 50;
     public static final int winchMotorId = 60;
     public static final int lifterMotorId = 61;

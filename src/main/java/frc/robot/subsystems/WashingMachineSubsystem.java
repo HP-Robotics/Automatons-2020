@@ -62,6 +62,8 @@ public class WashingMachineSubsystem extends SubsystemBase {
          * pdp.getCurrent(Constants.washingMachinePDPChannel)); }
          */
         SmartDashboard.putNumber("Wash Velocity", spinnerMotor.getSelectedSensorVelocity());
+        SmartDashboard.putNumber("Wash Position", spinnerMotor.getSelectedSensorPosition());
+        SmartDashboard.putNumber("Wash Error", spinnerMotor.getClosedLoopError());
     }
 
     public void setVelocity(final double velocity, final double uptakeOutput) {

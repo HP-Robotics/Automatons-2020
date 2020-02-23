@@ -6,8 +6,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -15,6 +18,7 @@ import frc.robot.Constants;
 public class DriveSubsystem extends SubsystemBase {
 
   public ADXRS450_Gyro gyro;
+  public AHRS navX;
   public Encoder leftEnc;
   public Encoder rightEnc;
   
@@ -31,21 +35,26 @@ public class DriveSubsystem extends SubsystemBase {
     tankDrive = new DifferentialDrive(left, right);
 
     gyro = new ADXRS450_Gyro();
-    leftEnc = new Encoder(23, 24, false, CounterBase.EncodingType.k4X);
-    rightEnc = new Encoder(21, 22, true, CounterBase.EncodingType.k4X);
+    navX = new AHRS(I2C.Port.kMXP);
+    //leftEnc = new Encoder(23, 24, false, CounterBase.EncodingType.k4X);
+    //rightEnc = new Encoder(21, 22, true, CounterBase.EncodingType.k4X);
 
     gyro.calibrate();
     gyro.reset();
-    leftEnc.reset();
-    rightEnc.reset();
+    navX.zeroYaw();
+    //leftEnc.reset();
+    //rightEnc.reset();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Gyro", gyro.getAngle());
-    SmartDashboard.putNumber("Left Encoder", leftEnc.get());
-    SmartDashboard.putNumber("Right Encoder", rightEnc.get());
+    SmartDashboard.putNumber("NavX", navX.getYaw());
+    System.out.println("NavX Yaw: " + navX.getYaw());
+    System.out.println("Do we have a NavX? " + (navX == null ? "Yes." : "No."));
+    //SmartDashboard.putNumber("Left Encoder", leftEnc.get());
+    //SmartDashboard.putNumber("Right Encoder", rightEnc.get());
   }
 
   public void drive(double left, double right) {

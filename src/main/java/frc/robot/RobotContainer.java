@@ -109,8 +109,8 @@ public class RobotContainer {
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem));
     new Trigger(this::getUp).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, false));
     new Trigger(this::getDown).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, true));
-    new Trigger(this::getLeft).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, false));
-    new Trigger(this::getRight).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, true));
+    //new Trigger(this::getLeft).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, false));
+    //new Trigger(this::getRight).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, true));
 
     new JoystickButton(m_operatorStick, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 400.0)));
     new JoystickButton(m_operatorStick, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));

@@ -73,10 +73,10 @@ public class HoodSubsystem extends SubsystemBase {
     // System.out.println("Offset: " + m_offset);
     System.out.println("Target: " + m_hoodController.getClosedLoopTarget(0) + " Position: " + m_hoodController.getSelectedSensorPosition(0) + " Error: " + m_hoodController.getClosedLoopError(0));
     if(m_hoodController.getControlMode() == ControlMode.Position) {
-      if(m_hoodController.getClosedLoopTarget(0) >= 0)
+      if(m_hoodController.getClosedLoopTarget(0) <= 0)
         m_hoodController.set(ControlMode.Position, 0);
-      if(m_hoodController.getClosedLoopTarget(0) <= -675)
-        m_hoodController.set(ControlMode.Position, -675);
+      if(m_hoodController.getClosedLoopTarget(0) >= 675)
+        m_hoodController.set(ControlMode.Position, 675);
     }
 
   }
