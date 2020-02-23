@@ -16,6 +16,8 @@ import frc.robot.commands.AutoDriveForwardCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveWinchCommand;
 import frc.robot.commands.GyroDriveCommand;
+import frc.robot.commands.CalibrateHood;
+import frc.robot.commands.CalibrateTurret;
 import frc.robot.commands.HoodCommandManual;
 import frc.robot.commands.HoodOffCommand;
 import frc.robot.commands.HoodSetCommand;
@@ -32,6 +34,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WashingMachineSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -116,6 +119,8 @@ public class RobotContainer {
     new JoystickButton(m_operatorStick, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
 
     new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem));
+
+    new JoystickButton(m_operatorStick, 4).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
   }
 
   /**
@@ -133,14 +138,10 @@ public class RobotContainer {
   }
 
   public boolean getUp() {
-    // if(Math.abs(m_operatorStick.getPOV()) <= 45 && m_operatorStick.getPOV() != -1)
-    //   System.out.println("UP");
     return Math.abs(m_operatorStick.getPOV()) <= 45 && m_operatorStick.getPOV() != -1;   
   }
 
   public boolean getDown() {
-    // if(Math.abs(m_operatorStick.getPOV() - 180) <= 45)
-    //   System.out.println("DOWN");
     return Math.abs(m_operatorStick.getPOV() - 180) <= 45;    
   }
   

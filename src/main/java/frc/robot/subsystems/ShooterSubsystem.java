@@ -90,7 +90,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Shooter Spinning: ", m_shooterController.getSelectedSensorVelocity() != 0);
     SmartDashboard.putNumber("Shooter Speed: ", m_shooterController.getSelectedSensorVelocity());
     SmartDashboard.putBoolean("Shooter Commanded: ", m_shooterController.getClosedLoopTarget() != 0);
-
+    System.out.println("Turret Position: " + m_turretController.getSelectedSensorPosition());
   }
 
   public void setShooter(double speed) {
@@ -103,10 +103,9 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
-  public void setTurretSpeed(double horizontalSpeed, double verticalSpeed) {
+  public void setTurretSpeed(double horizontalSpeed) {
     if (Constants.turretSafetyDisabled) {
       m_turretController.set(ControlMode.PercentOutput, horizontalSpeed * Constants.turretCoefficient);
-     // m_hoodController.set(ControlMode.PercentOutput, verticalSpeed * Constants.hoodCoefficient);
     }
   }
 
@@ -122,5 +121,13 @@ public class ShooterSubsystem extends SubsystemBase {
     if (Constants.turretSafetyDisabled) {
       m_turretController.set(ControlMode.Position, m_turretController.getClosedLoopTarget(0) + difference);
     }
+  }
+
+  public void resetTurretEncoder() {
+    m_turretController.setSelectedSensorPosition(0);
+  }
+
+  public boolean isRevLimit() {
+    return m_turretController.getSensorCollection().isRevLimitSwitchClosed();
   }
 } 

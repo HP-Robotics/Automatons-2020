@@ -45,7 +45,7 @@ public class HoodSubsystem extends SubsystemBase {
     m_hoodController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.shooterTimeout);
     m_hoodController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
     m_hoodController.setSensorPhase(false);
-    m_hoodController.setInverted(false);
+    m_hoodController.setInverted(true);
     m_hoodController.config_kP(0, Constants.hoodP);
     m_hoodController.config_kI(0, Constants.hoodI);
     m_hoodController.config_kD(0, Constants.hoodD);
@@ -71,13 +71,6 @@ public class HoodSubsystem extends SubsystemBase {
       m_offset = -m_revAbsolute.getDistance() + m_hoodController.getSelectedSensorPosition() - Constants.absZeroOffset;
     } */
     // System.out.println("Offset: " + m_offset);
-    System.out.println("Target: " + m_hoodController.getClosedLoopTarget(0) + " Position: " + m_hoodController.getSelectedSensorPosition(0) + " Error: " + m_hoodController.getClosedLoopError(0));
-    if(m_hoodController.getControlMode() == ControlMode.Position) {
-      if(m_hoodController.getClosedLoopTarget(0) <= 0)
-        m_hoodController.set(ControlMode.Position, 0);
-      if(m_hoodController.getClosedLoopTarget(0) >= 675)
-        m_hoodController.set(ControlMode.Position, 675);
-    }
 
   }
 
@@ -89,11 +82,19 @@ public class HoodSubsystem extends SubsystemBase {
   public void setHoodPositionManual (double difference) {
     if (Constants.turretSafetyDisabled) {
       m_hoodController.set(ControlMode.Position, m_hoodController.getClosedLoopTarget(0) + difference);
+      System.out.println("Setting hood position: " + m_hoodController.getClosedLoopTarget(0) + difference);
     }
   }
 
+  public void setHoodPower (double output) {
+    m_hoodController.set(ControlMode.PercentOutput, output);
+  }
   public void setHoodOff () {
     m_hoodController.set(ControlMode.PercentOutput, 0.0);
     System.out.println("Hood Set Off");
+  }
+
+  public void resetEncoder () {
+    m_hoodController.setSelectedSensorPosition(0);
   }
 }

@@ -51,8 +51,6 @@ public class DriveSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Gyro", gyro.getAngle());
     SmartDashboard.putNumber("NavX", navX.getYaw());
-    System.out.println("NavX Yaw: " + navX.getYaw());
-    System.out.println("Do we have a NavX? " + (navX == null ? "Yes." : "No."));
     //SmartDashboard.putNumber("Left Encoder", leftEnc.get());
     //SmartDashboard.putNumber("Right Encoder", rightEnc.get());
   }
