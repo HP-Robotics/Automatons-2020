@@ -80,9 +80,13 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public void setHoodPositionManual (double difference) {
+    double newTarget = m_hoodController.getClosedLoopTarget(0) + difference;
+    if(newTarget < 50)
+      newTarget = 50.0;
+    if(newTarget > 1000)
+      newTarget = 1000.0;
     if (Constants.turretSafetyDisabled) {
-      m_hoodController.set(ControlMode.Position, m_hoodController.getClosedLoopTarget(0) + difference);
-      System.out.println("Setting hood position: " + m_hoodController.getClosedLoopTarget(0) + difference);
+      m_hoodController.set(ControlMode.Position, newTarget);
     }
   }
 
