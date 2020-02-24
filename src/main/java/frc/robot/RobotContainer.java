@@ -22,6 +22,7 @@ import frc.robot.commands.HoodCommandManual;
 import frc.robot.commands.HoodOffCommand;
 import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.JumpTurret;
 import frc.robot.commands.ReverseWasherCommand;
 import frc.robot.commands.TurretCommandManual;
 import frc.robot.commands.TurretOffCommand;
@@ -128,6 +129,7 @@ public class RobotContainer {
     new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem));
 
     new JoystickButton(m_operatorStick, 4).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
+    new JoystickButton(m_operatorStick, 3).whenPressed(new JumpTurret(m_shooterSubsystem));
   }
 
   /**

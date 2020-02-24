@@ -94,9 +94,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Shooter Spinning: ", m_shooterController.getSelectedSensorVelocity() != 0);
-    SmartDashboard.putNumber("Shooter Speed: ", m_shooterController.getSelectedSensorVelocity());
+    // SmartDashboard.putNumber("Shooter Speed", m_shooterController.getSelectedSensorVelocity());
+    // SmartDashboard.putNumber("Follower Speed", m_shooterFollower.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Turret Current Position", m_turretController.getSelectedSensorPosition(0));
     //SmartDashboard.putBoolean("Shooter Commanded: ", m_shooterController.getClosedLoopTarget() != 0);
-    System.out.println("Turret Setpoint: " + m_turretController.getClosedLoopTarget(0) + " Turret Position: " + m_turretController.getSelectedSensorPosition());
+    //System.out.println("Turret Setpoint: " + m_turretController.getClosedLoopTarget(0) + " Turret Position: " + m_turretController.getSelectedSensorPosition());
   }
 
   public void setShooter(double speed) {
@@ -105,7 +107,7 @@ public class ShooterSubsystem extends SubsystemBase {
       m_shooterFollower.set(ControlMode.PercentOutput, 0.0);
     } else{
       m_shooterController.set(ControlMode.Velocity, speed);
-      m_shooterFollower.set(ControlMode.PercentOutput, 0.0);
+      m_shooterFollower.set(ControlMode.Velocity, speed);
     }
   }
 

@@ -44,7 +44,7 @@ public final class Constants {
     public static final double shooterD = 1;
     public static final double shooterF = 0;
     public static final int shooterTimeout = 30;
-    public static final double shooterFullspeed = 13000.0;
+    public static final double shooterFullspeed = 10000.0;
     public static final double shooterOff = 0.0;
 
     public static final boolean turretSafetyDisabled = true; // TODO FIX THIS
