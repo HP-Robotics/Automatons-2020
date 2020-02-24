@@ -14,7 +14,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.Constants;
 
 public class HoodSubsystem extends SubsystemBase {
@@ -23,7 +22,6 @@ public class HoodSubsystem extends SubsystemBase {
    */
   
   TalonSRX m_hoodController;
-  PIDController m_PidController;
 
   DutyCycleEncoder m_revAbsolute;
   double m_offset;
@@ -38,7 +36,6 @@ public class HoodSubsystem extends SubsystemBase {
     // m_revAbsolute.setDistancePerRotation(Constants.johnsonTicks);
 
     m_hoodController = new TalonSRX(Constants.hoodMotorId);
-    m_PidController = new PIDController(Constants.hoodP, Constants.hoodI, Constants.hoodD);
 
     
     m_hoodController.configFactoryDefault();

@@ -67,7 +67,7 @@ public final class Constants {
     public static final int turretSensorTimeout = 100;
     public static final int turretAxis = 0;
     public static final int hoodMovement = 25;
-    public static final int turretMovement = 50;
+    public static final int turretMovement = 200;
     public static final double johnsonTicks = -177.6;
     public static final double absZeroOffset = 116.8;
 

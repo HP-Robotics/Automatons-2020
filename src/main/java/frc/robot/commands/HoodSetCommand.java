@@ -23,18 +23,24 @@ public class HoodSetCommand extends CommandBase {
   public HoodSetCommand(HoodSubsystem subsystem, DoubleSupplier target) {
     m_subsystem = subsystem;
     m_target = target;
-    addRequirements(m_subsystem);
+ 
+      addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    double target = m_target.getAsDouble();
+    if (target < 50)
+      target = 50;
+    if (target > 1000)
+       target = 1000;
+      m_subsystem.setHoodPosition(target);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setHoodPosition(m_target.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +51,6 @@ public class HoodSetCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

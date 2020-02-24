@@ -17,7 +17,7 @@ public class TurretOffCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ShooterSubsystem m_subsystem;
 
-  public TurretOffCommand(ShooterSubsystem subsystem, boolean reverse) {
+  public TurretOffCommand(ShooterSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -42,6 +42,6 @@ public class TurretOffCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
