@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.SerialPort.Port;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -35,7 +37,7 @@ public class DriveSubsystem extends SubsystemBase {
     tankDrive = new DifferentialDrive(left, right);
 
     gyro = new ADXRS450_Gyro();
-    navX = new AHRS(I2C.Port.kMXP);
+    navX = new AHRS(Port.kUSB);
     //leftEnc = new Encoder(23, 24, false, CounterBase.EncodingType.k4X);
     //rightEnc = new Encoder(21, 22, true, CounterBase.EncodingType.k4X);
 
