@@ -44,11 +44,12 @@ public final class Constants {
     public static final double shooterD = 1;
     public static final double shooterF = 0;
     public static final int shooterTimeout = 30;
-    public static final double shooterFullspeed = 10000.0;
+    public static final double shooterFullspeed = 16000.0;
     public static final double shooterOff = 0.0;
 
     public static final boolean turretSafetyDisabled = true; // TODO FIX THIS
     public static final double turretCoefficient = 0.5;
+    public static final double turretLimit = 3000;
     public static final double hoodCoefficient = 1;
     public static final double turretOff = 0.0;
     public static final double hoodOff = 0.0;
@@ -84,7 +85,7 @@ public final class Constants {
     public static final double intakeSpeed = -0.75;
     public static final double uptakeReverse = 0.25;
 
-    public static final double winchSpeed = -0.9;
+    public static final double winchSpeed = 0.5;
     public static final double winchStop = 0.0;
     public static final double lifterSpeed = 0.5;
 

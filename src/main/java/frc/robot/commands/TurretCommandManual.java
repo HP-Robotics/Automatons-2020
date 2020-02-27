@@ -19,14 +19,11 @@ import java.util.function.DoubleSupplier;
 public class TurretCommandManual extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ShooterSubsystem m_subsystem;
-  private final int m_reverse;
+  private final DoubleSupplier m_power;
 
-  public TurretCommandManual(ShooterSubsystem subsystem, boolean reverse) {
+  public TurretCommandManual(ShooterSubsystem subsystem, DoubleSupplier power) {
     m_subsystem = subsystem;
-    if(reverse)
-      m_reverse = -1;
-    else
-      m_reverse = 1;
+    m_power = power;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -34,7 +31,7 @@ public class TurretCommandManual extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setManualTurretAngle(m_reverse * Constants.turretMovement);
+    m_subsystem.setManualTurretAngle((int) m_power.getAsDouble() * Constants.turretMovement);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -133,8 +133,8 @@ public class ShooterSubsystem extends SubsystemBase {
     if(newTarget < 0) {
       newTarget = 0.0;
     }
-    if(newTarget > 3000) {
-      newTarget = 3000.0;
+    if(newTarget > Constants.turretLimit) {
+      newTarget = Constants.turretLimit;
     }
     System.out.println("BRUH");
     m_turretController.set(ControlMode.Position, newTarget);

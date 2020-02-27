@@ -116,8 +116,7 @@ public class RobotContainer {
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem));
     // new Trigger(this::getUp).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, false));
     // new Trigger(this::getDown).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, true));
-    // new Trigger(this::getLeft).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, false));
-    // new Trigger(this::getRight).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, true));
+    new Trigger(this::getTurretTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2)));
 
     new JoystickButton(m_operatorStick, 5).whileHeld(new DriveLifterCommand(m_lifterSubsystem, false));
     new JoystickButton(m_operatorStick, 7).whileHeld(new DriveLifterCommand(m_lifterSubsystem, true));
@@ -167,5 +166,13 @@ public class RobotContainer {
 
   public boolean getRight() {
     return m_operatorStick.getPOV() == 90;    
+  }
+
+  public boolean getTurretTrigger() {
+    return Math.abs(m_operatorStick.getRawAxis(2)) > 0.1;
+  }
+
+  public boolean getHoodTrigger() {
+    return Math.abs(m_operatorStick.getRawAxis(3)) > 0.1;
   }
 }
