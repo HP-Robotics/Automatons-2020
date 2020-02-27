@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveForwardCommand;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveLifterCommand;
 import frc.robot.commands.DriveWinchCommand;
 import frc.robot.commands.GyroDriveCommand;
 import frc.robot.commands.CalibrateHood;
@@ -109,7 +110,6 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
     new JoystickButton(m_driverStickLeft, 2).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1)));
     new JoystickButton(m_driverStickRight, 1).toggleWhenPressed(new IntakeCommand(m_intakeSubsystem));
     new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem)); 
@@ -119,17 +119,22 @@ public class RobotContainer {
     // new Trigger(this::getLeft).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, false));
     // new Trigger(this::getRight).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, true));
 
-    new JoystickButton(m_operatorStick, 5).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 400.0)));
-    new JoystickButton(m_operatorStick, 7).whenPressed(new HoodOffCommand(m_hoodSubsystem));
+    new JoystickButton(m_operatorStick, 5).whileHeld(new DriveLifterCommand(m_lifterSubsystem, false));
+    new JoystickButton(m_operatorStick, 7).whileHeld(new DriveLifterCommand(m_lifterSubsystem, true));
 
+    new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem));
+    new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
+
+    
+    //programmer secret buttons
     new JoystickButton(m_driverStickRight, 5).whenPressed(new TurretSetCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("Turret Position", -1000.0)));
     new JoystickButton(m_driverStickRight, 10).whenPressed(new TurretOffCommand(m_shooterSubsystem));
 
+    new JoystickButton(m_driverStickRight, 6).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 400.0)));
+    new JoystickButton(m_driverStickRight, 9).whenPressed(new HoodOffCommand(m_hoodSubsystem));
 
-    new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem));
-
-    new JoystickButton(m_operatorStick, 4).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
-    new JoystickButton(m_operatorStick, 3).whenPressed(new JumpTurret(m_shooterSubsystem));
+    new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
+    new JoystickButton(m_driverStickRight, 8).whenPressed(new JumpTurret(m_shooterSubsystem));
   }
 
   /**

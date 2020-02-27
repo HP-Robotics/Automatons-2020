@@ -20,15 +20,20 @@ public class LifterSubsystem extends SubsystemBase {
   private final TalonSRX m_winchController;
   // private final TalonSRX m_lifterController;
 
+  private final TalonSRX m_lifterController;
+  
   public LifterSubsystem() {
     m_winchController = new TalonSRX(Constants.winchMotorId);
-    // m_lifterController = new TalonSRX(Constants.lifterMotorId);
+    m_lifterController = new TalonSRX(Constants.lifterMotorId);
   }
 
   public void driveWinch(double speed) {
     m_winchController.set(ControlMode.PercentOutput, speed);
   }
 
+  public void driveLifter(double speed) {
+    m_lifterController.set(ControlMode.PercentOutput, speed);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -86,6 +86,7 @@ public final class Constants {
 
     public static final double winchSpeed = -0.9;
     public static final double winchStop = 0.0;
+    public static final double lifterSpeed = 0.5;
 
 
     /* ########################################################### *
