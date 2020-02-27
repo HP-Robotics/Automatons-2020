@@ -31,7 +31,7 @@ public class TurretCommandManual extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setManualTurretAngle((int) m_power.getAsDouble() * Constants.turretMovement);
+    m_subsystem.setManualTurretAngle(m_power.getAsDouble() * Constants.turretMovement);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

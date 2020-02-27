@@ -128,7 +128,7 @@ public class ShooterSubsystem extends SubsystemBase {
     System.out.println("TROUBLE 2 Angle: " + angle);
   }
 
-  public void setManualTurretAngle(int difference) {
+  public void setManualTurretAngle(double difference) {
     double newTarget = m_turretController.getClosedLoopTarget(0) - difference;
     if(newTarget < 0) {
       newTarget = 0.0;
