@@ -31,8 +31,8 @@ public class TurretSetCommand extends CommandBase {
   public void initialize() {
     double target = m_target.getAsDouble();
 
-    if (target < -3000 ) {
-      target = -3000;
+    if (target < 0) {
+      target = -0.0;
     }
     if (target > 3000 ) {
       target = 3000;

@@ -81,7 +81,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_turretController.configFactoryDefault();
     m_turretController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.shooterTimeout);
-    m_turretController.setInverted(true);
+    m_turretController.setInverted(false);
     m_turretController.setSensorPhase(true);
     m_turretController.configNominalOutputForward(0, Constants.shooterTimeout);
     m_turretController.configNominalOutputReverse(0, Constants.shooterTimeout);
@@ -130,8 +130,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setManualTurretAngle(int difference) {
     double newTarget = m_turretController.getClosedLoopTarget(0) - difference;
-    if(newTarget < -3000) {
-      newTarget = -3000.0;
+    if(newTarget < 0) {
+      newTarget = 0.0;
     }
     if(newTarget > 3000) {
       newTarget = 3000.0;

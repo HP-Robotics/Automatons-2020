@@ -34,7 +34,7 @@ public class JumpTurret extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setTurretSpeed(-0.4);
+    m_subsystem.setTurretSpeed(0.4);
   }
 
   // Called once the command ends or is interrupted.
