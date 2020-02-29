@@ -33,9 +33,9 @@ public class ToggleShooterCommand extends CommandBase {
   @Override
   public void execute() {
     if(!m_subsystem.getEnabled()) {
-      m_subsystem.setShooter(Constants.shooterFullspeed);
+      m_subsystem.setShooter(true);
     } else {
-      m_subsystem.setShooter(Constants.shooterOff);
+      m_subsystem.setShooter(false);
     }
   }
 

@@ -33,6 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry ledMode = limelightTable.getEntry("ledMode");
+  private double m_shooterSpeed = Constants.shooterFullspeed;
   
 
   boolean on;
@@ -86,13 +87,13 @@ public class ShooterSubsystem extends SubsystemBase {
     //System.out.println("Turret Setpoint: " + m_turretController.getClosedLoopTarget(0) + " Turret Position: " + m_turretController.getSelectedSensorPosition());
   }
 
-  public void setShooter(double speed) {
-    if(speed == 0.0) {
+  public void setShooter(boolean enabled) {
+    if(!enabled) {
       m_shooterController.set(ControlMode.PercentOutput, 0.0);
       ledMode.setNumber(1);
       on = false;
     } else {
-      m_shooterController.set(ControlMode.Velocity, speed);
+      m_shooterController.set(ControlMode.Velocity, m_shooterSpeed);
       ledMode.setNumber(3);
       on = true;
     }
@@ -137,5 +138,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean isRevLimit() {
     return m_turretController.getSensorCollection().isRevLimitSwitchClosed();
+  }
+
+  public void setShooterSpeed(double speed) {
+    m_shooterSpeed = speed;
+    setShooter(on);
   }
 } 
