@@ -115,8 +115,10 @@ public class RobotContainer {
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem)); // A
     new Trigger(this::getUp).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2350.0), new HoodSetCommand(m_hoodSubsystem, () -> 895.0)));
     // new Trigger(this::getDown).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, true));
-    new Trigger(this::getTurretTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2))); // Right joystick horizontal
-    new Trigger(this::getHoodTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, () -> m_operatorStick.getRawAxis(1))); // Left joystick vertical
+    new Trigger(this::getTurretCoarseTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2))); // Right joystick horizontal
+    new Trigger(this::getHoodCoarseTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, () -> m_operatorStick.getRawAxis(3))); // Right joystick vertical
+    new Trigger(this::getTurretFineTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0)*0.2)); // Left joystick horizontal
+    new Trigger(this::getHoodFineTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, () -> m_operatorStick.getRawAxis(1)*0.2)); // Left joystick vertical
 
     new JoystickButton(m_operatorStick, 5).whileHeld(new DriveLifterCommand(m_lifterSubsystem, false)); // Left Bumper
     new JoystickButton(m_operatorStick, 7).whileHeld(new DriveLifterCommand(m_lifterSubsystem, true)); // Left Trigger
@@ -167,11 +169,19 @@ public class RobotContainer {
     return m_operatorStick.getPOV() == 90;    
   }
 
-  public boolean getTurretTrigger() {
-    return Math.abs(m_operatorStick.getRawAxis(2)) > 0.1;
+  public boolean getTurretCoarseTrigger() {
+    return Math.abs(m_operatorStick.getRawAxis(2)) > 0.2;
   }
 
-  public boolean getHoodTrigger() {
-    return Math.abs(m_operatorStick.getRawAxis(1)) > 0.1;
+  public boolean getHoodCoarseTrigger() {
+    return Math.abs(m_operatorStick.getRawAxis(3)) > 0.2;
+  }
+
+  public boolean getTurretFineTrigger() {
+    return Math.abs(m_operatorStick.getRawAxis(0)) > 0.2;
+  }
+
+  public boolean getHoodFineTrigger() {
+    return Math.abs(m_operatorStick.getRawAxis(1)) > 0.2;
   }
 }
