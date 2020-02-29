@@ -14,6 +14,9 @@ import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -27,6 +30,10 @@ public class ShooterSubsystem extends SubsystemBase {
   TalonFX m_shooterFollower;
 
   TalonSRX m_turretController;
+
+  NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+  NetworkTableEntry ledMode = limelightTable.getEntry("ledMode");
+  
 
   boolean on;
   
@@ -64,6 +71,8 @@ public class ShooterSubsystem extends SubsystemBase {
     m_turretController.configPeakOutputForward(1, Constants.shooterTimeout);
     m_turretController.configPeakOutputReverse(-1, Constants.shooterTimeout);
     m_turretController.config_kP(0, 8);
+    
+    ledMode.setNumber(1);
   }
 
   @Override
@@ -80,9 +89,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setShooter(double speed) {
     if(speed == 0.0) {
       m_shooterController.set(ControlMode.PercentOutput, 0.0);
+      ledMode.setNumber(1);
       on = false;
     } else {
       m_shooterController.set(ControlMode.Velocity, speed);
+      ledMode.setNumber(3);
       on = true;
     }
   }
