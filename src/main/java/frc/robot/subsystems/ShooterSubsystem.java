@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -27,6 +28,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   TalonSRX m_turretController;
 
+  boolean on;
+  
   public ShooterSubsystem() {
     m_shooterController = new TalonFX(Constants.shooterMotor1Id);
     m_shooterFollower = new TalonFX(Constants.shooterMotor2Id);
@@ -35,29 +38,12 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.configFactoryDefault();
     m_shooterFollower.configFactoryDefault();
 
-    m_shooterFollower.setInverted(true);
-
-    /* Config sensor used for Primary PID [Velocity] */
-    m_shooterController.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0,
-            Constants.shooterTimeout);
-    m_shooterFollower.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, Constants.shooterTimeout);
-
-
-    /**
-     * Phase sensor accordingly. Positive Sensor Reading should match Green
-     * (blinking) Leds on Talon
-     */
-    
-    /* Config the peak and nominal outputs */
+    m_shooterFollower.follow(m_shooterController);
+    m_shooterFollower.setInverted(InvertType.OpposeMaster);
     m_shooterController.configNominalOutputForward(0, Constants.shooterTimeout);
     m_shooterController.configNominalOutputReverse(0, Constants.shooterTimeout);
     m_shooterController.configPeakOutputForward(1, Constants.shooterTimeout);
     m_shooterController.configPeakOutputReverse(-1, Constants.shooterTimeout);
-
-    m_shooterFollower.configNominalOutputForward(0, Constants.shooterTimeout);
-    m_shooterFollower.configNominalOutputReverse(0, Constants.shooterTimeout);
-    m_shooterFollower.configPeakOutputForward(1, Constants.shooterTimeout);
-    m_shooterFollower.configPeakOutputReverse(-1, Constants.shooterTimeout);
 
     /* Config the Velocity closed loop gains in slot0 */
     m_shooterController.config_kF(0, Constants.shooterF, Constants.shooterTimeout);
@@ -65,18 +51,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.config_kI(0, Constants.shooterI, Constants.shooterTimeout);
     m_shooterController.config_kD(0, Constants.shooterD, Constants.shooterTimeout);
 
-    m_shooterFollower.config_kF(0, Constants.shooterF, Constants.shooterTimeout);
-    m_shooterFollower.config_kP(0, Constants.shooterP, Constants.shooterTimeout);
-    m_shooterFollower.config_kI(0, 0, Constants.shooterTimeout);
-    m_shooterFollower.config_kD(0, Constants.shooterD, Constants.shooterTimeout);
-
     m_shooterController.config_IntegralZone(0, 1000);
     m_shooterController.configVelocityMeasurementWindow(1);
     m_shooterController.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
-
-    m_shooterFollower.config_IntegralZone(0, 1000);
-    m_shooterFollower.configVelocityMeasurementWindow(1);
-    m_shooterFollower.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms);
 
     m_turretController.configFactoryDefault();
     m_turretController.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.shooterTimeout);
@@ -103,10 +80,10 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setShooter(double speed) {
     if(speed == 0.0) {
       m_shooterController.set(ControlMode.PercentOutput, 0.0);
-      m_shooterFollower.set(ControlMode.PercentOutput, 0.0);
-    } else{
+      on = false;
+    } else {
       m_shooterController.set(ControlMode.Velocity, speed);
-      m_shooterFollower.set(ControlMode.Velocity, speed);
+      on = true;
     }
   }
 
@@ -125,6 +102,10 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setTurretAngle(double angle) {
     m_turretController.set(ControlMode.Position, angle);
     System.out.println("TROUBLE 2 Angle: " + angle);
+  }
+
+  public boolean getEnabled() {
+    return on;
   }
 
   public void setManualTurretAngle(double difference) {

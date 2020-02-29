@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.HoodSubsystem;
@@ -17,22 +19,19 @@ public class HoodCommandManual extends CommandBase {
    */
 
   private final HoodSubsystem m_subsystem;
-  private final int m_reverse;
+  private final DoubleSupplier m_power;
   
-  public HoodCommandManual(HoodSubsystem subsystem, boolean reverse) {
+  public HoodCommandManual(HoodSubsystem subsystem, DoubleSupplier power) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
-    if(reverse)
-      m_reverse = -1;
-    else
-      m_reverse = 1;
+    m_power = power;
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setHoodPositionManual(m_reverse * Constants.hoodMovement);
+    m_subsystem.setHoodPositionManual(m_power.getAsDouble() * Constants.hoodMovement);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

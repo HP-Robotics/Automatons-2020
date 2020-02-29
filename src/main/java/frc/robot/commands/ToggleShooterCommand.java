@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class SpinUpCommand extends CommandBase {
+public class ToggleShooterCommand extends CommandBase {
   /**
    * Creates a new ShootCommand.
    */
 
   private final ShooterSubsystem m_subsystem;
   
-  public SpinUpCommand(ShooterSubsystem subsystem) {
+  public ToggleShooterCommand(ShooterSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
     addRequirements(m_subsystem);
@@ -32,19 +32,22 @@ public class SpinUpCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setShooter(Constants.shooterFullspeed);
+    if(!m_subsystem.getEnabled()) {
+      m_subsystem.setShooter(Constants.shooterFullspeed);
+    } else {
+      m_subsystem.setShooter(Constants.shooterOff);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_subsystem.setShooter(Constants.shooterOff);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 
 }

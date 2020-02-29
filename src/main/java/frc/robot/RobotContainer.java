@@ -23,13 +23,12 @@ import frc.robot.commands.HoodCommandManual;
 import frc.robot.commands.HoodOffCommand;
 import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.JumpTurret;
 import frc.robot.commands.ReverseWasherCommand;
 import frc.robot.commands.TurretCommandManual;
 import frc.robot.commands.TurretOffCommand;
 import frc.robot.commands.TurretSetCommand;
-import frc.robot.commands.SpinUpCommand;
 import frc.robot.commands.SpinWasherCommand;
+import frc.robot.commands.ToggleShooterCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -110,19 +109,20 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverStickLeft, 2).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1)));
-    new JoystickButton(m_driverStickRight, 1).whileHeld(new IntakeCommand(m_intakeSubsystem));
-    new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem)); 
-    new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem));
-    // new Trigger(this::getUp).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, false));
+    new JoystickButton(m_driverStickLeft, 2).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1))); // Middle Button
+    new JoystickButton(m_driverStickRight, 1).whileHeld(new IntakeCommand(m_intakeSubsystem)); // Trigger
+    new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem)); // X
+    new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem)); // A
+    new Trigger(this::getUp).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2350.0), new HoodSetCommand(m_hoodSubsystem, () -> 895.0)));
     // new Trigger(this::getDown).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, true));
-    new Trigger(this::getTurretTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2)));
+    new Trigger(this::getTurretTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2))); // Right joystick horizontal
+    new Trigger(this::getHoodTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, () -> m_operatorStick.getRawAxis(1))); // Left joystick vertical
 
-    new JoystickButton(m_operatorStick, 5).whileHeld(new DriveLifterCommand(m_lifterSubsystem, false));
-    new JoystickButton(m_operatorStick, 7).whileHeld(new DriveLifterCommand(m_lifterSubsystem, true));
+    new JoystickButton(m_operatorStick, 5).whileHeld(new DriveLifterCommand(m_lifterSubsystem, false)); // Left Bumper
+    new JoystickButton(m_operatorStick, 7).whileHeld(new DriveLifterCommand(m_lifterSubsystem, true)); // Left Trigger
 
-    new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem));
-    new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new SpinUpCommand(m_shooterSubsystem));
+    new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem)); // Right Bumper
+    new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new ToggleShooterCommand(m_shooterSubsystem)); // Right Trigger
 
     
     //programmer secret buttons
@@ -133,7 +133,6 @@ public class RobotContainer {
     new JoystickButton(m_driverStickRight, 9).whenPressed(new HoodOffCommand(m_hoodSubsystem));
 
     new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
-    new JoystickButton(m_driverStickRight, 8).whenPressed(new JumpTurret(m_shooterSubsystem));
   }
 
   /**
@@ -173,6 +172,6 @@ public class RobotContainer {
   }
 
   public boolean getHoodTrigger() {
-    return Math.abs(m_operatorStick.getRawAxis(3)) > 0.1;
+    return Math.abs(m_operatorStick.getRawAxis(1)) > 0.1;
   }
 }

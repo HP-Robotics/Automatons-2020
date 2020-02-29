@@ -68,7 +68,7 @@ public class HoodSubsystem extends SubsystemBase {
       m_offset = -m_revAbsolute.getDistance() + m_hoodController.getSelectedSensorPosition() - Constants.absZeroOffset;
     } */
     // System.out.println("Offset: " + m_offset);
-
+    SmartDashboard.putNumber("Hood Current Position", m_hoodController.getSelectedSensorPosition(0));
   }
 
   public void setHoodPosition (double position) {

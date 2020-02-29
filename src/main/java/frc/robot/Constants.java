@@ -39,12 +39,12 @@ public final class Constants {
     public static final double washingMachineLimitedCurrent = 5.0;
     public static final double washingMachineThresholdTime = 2.0;
 
-    public static final double shooterP = 1; 
-    public static final double shooterI = 0.005;
-    public static final double shooterD = 1;
-    public static final double shooterF = 0;
+    public static final double shooterP = 0.1; 
+    public static final double shooterI = 0.001;
+    public static final double shooterD = 0.01;
+    public static final double shooterF = 0.053;
     public static final int shooterTimeout = 30;
-    public static final double shooterFullspeed = 16000.0;
+    public static final double shooterFullspeed = 16000.0; //7000.0;
     public static final double shooterOff = 0.0;
 
     public static final boolean turretSafetyDisabled = true; // TODO FIX THIS
@@ -56,9 +56,9 @@ public final class Constants {
     // public static final double hoodP = 150;
     // public static final double hoodI = 0.01;
     // public static final double hoodD = 300;
-    public static final double hoodP = 1.25;
+    public static final double hoodP = 2.5;
     public static final double hoodI = 0.005;
-    public static final double hoodD = 50;
+    public static final double hoodD = 100;
     public static final int hoodIntegralZone = 100;
     public static final double hoodRamp = 0.25;
     public static final double hoodBottom = 1100;
@@ -67,8 +67,8 @@ public final class Constants {
     public static final int turretClosedLoopSensor = 0;
     public static final int turretSensorTimeout = 100;
     public static final int turretAxis = 0;
-    public static final int hoodMovement = 25;
-    public static final int turretMovement = 200;
+    public static final int hoodMovement = -25;
+    public static final int turretMovement = -20;
     public static final double johnsonTicks = -177.6;
     public static final double absZeroOffset = 116.8;
 
