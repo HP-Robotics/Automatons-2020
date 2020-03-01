@@ -25,6 +25,7 @@ import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimeLightCommand;
 import frc.robot.commands.ReverseWasherCommand;
+import frc.robot.commands.ShooterSpeedCommand;
 import frc.robot.commands.TurretCommandManual;
 import frc.robot.commands.TurretOffCommand;
 import frc.robot.commands.TurretSetCommand;
@@ -87,8 +88,10 @@ public class RobotContainer {
     m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
     
+    
     SmartDashboard.putNumber("Hood Position", 0.0);
     SmartDashboard.putNumber("Turret Position", 0.0);
+    SmartDashboard.putNumber("A shooter speed named desire", 0.0);
 
 
     m_stringChooser = new SendableChooser<String>();
@@ -141,6 +144,7 @@ public class RobotContainer {
     new JoystickButton(m_driverStickRight, 9).whenPressed(new HoodOffCommand(m_hoodSubsystem));
 
     new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
+    new JoystickButton(m_driverStickRight, 14).whenPressed(new ShooterSpeedCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("A shooter speed named desire", 0.0)));
   }
 
   /**
