@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -22,18 +25,34 @@ public class DriveSubsystem extends SubsystemBase {
   public AHRS navX;
   public Encoder leftEnc;
   public Encoder rightEnc;
-  
-  SpeedControllerGroup left;
-  SpeedControllerGroup right;
 
-  DifferentialDrive tankDrive;
+  public TalonFX frontLeftController;
+  public TalonFX frontRightController;
+  public TalonFX backLeftController;
+  public TalonFX backRightController;
 
   public DriveSubsystem() {
     
-    left = new SpeedControllerGroup(new WPI_TalonSRX(Constants.frontLeftMotorID), new WPI_TalonSRX(Constants.rearLeftMotorID));
-    right = new SpeedControllerGroup(new WPI_TalonSRX(Constants.frontRightMotorID), new WPI_TalonSRX(Constants.rearRightMotorID));
+    frontLeftController = new TalonFX(10);
+    frontRightController = new TalonFX(11);
+    backLeftController = new TalonFX(12);
+    backRightController = new TalonFX(13);
 
-    tankDrive = new DifferentialDrive(left, right);
+    frontLeftController.configFactoryDefault();
+    frontRightController.configFactoryDefault();
+    backLeftController.configFactoryDefault();
+    backRightController.configFactoryDefault();
+
+    backLeftController.follow(frontLeftController);
+    backRightController.follow(frontRightController);
+    backLeftController.setInverted(InvertType.FollowMaster);
+    backRightController.setInverted(InvertType.FollowMaster);
+
+    frontLeftController.setInverted(false);
+    frontRightController.setInverted(true);
+
+    frontLeftController.configOpenloopRamp(1.0);
+    frontRightController.configOpenloopRamp(1.0);
 
     gyro = new ADXRS450_Gyro();
     navX = new AHRS(Port.kUSB);
@@ -57,6 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void drive(double left, double right) {
-    tankDrive.tankDrive(left, right);
+    frontLeftController.set(ControlMode.PercentOutput, left);
+    frontRightController.set(ControlMode.PercentOutput, right);
   }
 }
