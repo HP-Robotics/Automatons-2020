@@ -32,7 +32,7 @@ public final class Constants {
     //public static final double washingMachineF = 0.15;
     public static final double washingMachineF = 0.0;
     public static final int washingMachineTimeout = 30;
-    public static final double washingMachineSpeed = -32500.0;
+    public static final double washingMachineSpeed = -28000.0;
     public static final double washingMachineOff = 0.0;
     public static final int washingMachinePDPChannel = 13;
     public static final double washingMachineMaxCurrent = 18.0;
@@ -85,7 +85,7 @@ public final class Constants {
     public static final double intakeSpeed = -0.75;
     public static final double uptakeReverse = 0.25;
 
-    public static final double winchSpeed = 0.5;
+    public static final double winchSpeed = 1.0;
     public static final double winchStop = 0.0;
     public static final double lifterSpeed = 0.5;
 

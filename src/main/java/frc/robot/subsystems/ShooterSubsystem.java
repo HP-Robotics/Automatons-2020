@@ -52,6 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterController.configNominalOutputReverse(0, Constants.shooterTimeout);
     m_shooterController.configPeakOutputForward(1, Constants.shooterTimeout);
     m_shooterController.configPeakOutputReverse(-1, Constants.shooterTimeout);
+    m_shooterController.configClosedloopRamp(1.0);
 
     /* Config the Velocity closed loop gains in slot0 */
     m_shooterController.config_kF(0, Constants.shooterF, Constants.shooterTimeout);
@@ -73,14 +74,14 @@ public class ShooterSubsystem extends SubsystemBase {
     m_turretController.configPeakOutputReverse(-1, Constants.shooterTimeout);
     m_turretController.config_kP(0, 8);
     
-    ledMode.setNumber(1);
+    //ledMode.setNumber(1);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("Shooter Spinning: ", m_shooterController.getSelectedSensorVelocity() != 0);
-    // SmartDashboard.putNumber("Shooter Speed", m_shooterController.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Shooter Speed", m_shooterController.getSelectedSensorVelocity());
     // SmartDashboard.putNumber("Follower Speed", m_shooterFollower.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Turret Current Position", m_turretController.getSelectedSensorPosition(0));
     //SmartDashboard.putBoolean("Shooter Commanded: ", m_shooterController.getClosedLoopTarget() != 0);
@@ -90,7 +91,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setShooter(boolean enabled) {
     if(!enabled) {
       m_shooterController.set(ControlMode.PercentOutput, 0.0);
-      ledMode.setNumber(1);
+      //ledMode.setNumber(1);
       on = false;
     } else {
       m_shooterController.set(ControlMode.Velocity, m_shooterSpeed);
@@ -143,5 +144,13 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setShooterSpeed(double speed) {
     m_shooterSpeed = speed;
     setShooter(on);
+  }
+
+  public double getTx() {
+    return limelightTable.getEntry("tx").getDouble(0.0);
+  }
+
+  public double getTv() {
+    return limelightTable.getEntry("tv").getDouble(0.0);
   }
 } 

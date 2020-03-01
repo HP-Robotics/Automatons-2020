@@ -7,41 +7,45 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class HoodCommandManual extends CommandBase {
+public class LimeLightCommand extends CommandBase {
   /**
-   * Creates a new HoodCommandManual.
+   * Creates a new LimeLightControl.
    */
 
-  private final HoodSubsystem m_subsystem;
-  private final DoubleSupplier m_power;
-  private final ShooterSubsystem m_shooterSubsystem;
-  
-  public HoodCommandManual(HoodSubsystem subsystem, ShooterSubsystem shooter, DoubleSupplier power) {
+  ShooterSubsystem m_shooter;
+  HoodSubsystem m_hood;
+  public LimeLightCommand(ShooterSubsystem shooter, HoodSubsystem hood) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_subsystem = subsystem;
-    m_shooterSubsystem = shooter;
-    m_power = power;
-    addRequirements(subsystem);
+    m_shooter = shooter;
+    m_hood = hood;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setHoodPositionManual(m_power.getAsDouble() * Constants.hoodMovement);
-
-    m_shooterSubsystem.setShooterSpeed(8.88888 * m_subsystem.getHoodTarget() + 8000);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (m_shooter.getTv() != 0.0) {
+      double command = 0;
+      if (m_shooter.getTx() > 5.0) {
+        command = 1;
+      } else if (m_shooter.getTx() < -5.0) {
+        command = -1;
+      } else if (Math.abs(m_shooter.getTx()) <= 1) {
+        command = 0;
+      } else {
+        command = m_shooter.getTx() / 5.0;
+      }
+      m_shooter.setManualTurretAngle(command * Constants.turretMovement);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -52,6 +56,6 @@ public class HoodCommandManual extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

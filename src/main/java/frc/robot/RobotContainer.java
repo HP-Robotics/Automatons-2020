@@ -23,6 +23,7 @@ import frc.robot.commands.HoodCommandManual;
 import frc.robot.commands.HoodOffCommand;
 import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.LimeLightCommand;
 import frc.robot.commands.ReverseWasherCommand;
 import frc.robot.commands.TurretCommandManual;
 import frc.robot.commands.TurretOffCommand;
@@ -113,12 +114,17 @@ public class RobotContainer {
     new JoystickButton(m_driverStickRight, 1).whileHeld(new IntakeCommand(m_intakeSubsystem)); // Trigger
     new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem)); // X
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem)); // A
-    new Trigger(this::getUp).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2350.0), new HoodSetCommand(m_hoodSubsystem, () -> 895.0)));
-    // new Trigger(this::getDown).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, true));
+
+    new Trigger(this::getUp).whenActive(new HoodSetCommand(m_hoodSubsystem, () -> 875.0));
+    new Trigger(this::getRight).whileActiveContinuous(new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem));
+    new Trigger(this::getDown).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2500.0), new HoodSetCommand(m_hoodSubsystem, () -> 20.0)));
+    //new Trigger(this::getLeft);
+
     new Trigger(this::getTurretCoarseTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2))); // Right joystick horizontal
-    new Trigger(this::getHoodCoarseTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, () -> m_operatorStick.getRawAxis(3))); // Right joystick vertical
+    new Trigger(this::getHoodCoarseTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, m_shooterSubsystem, () -> m_operatorStick.getRawAxis(3))); // Right joystick vertical
     new Trigger(this::getTurretFineTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0)*0.2)); // Left joystick horizontal
-    new Trigger(this::getHoodFineTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, () -> m_operatorStick.getRawAxis(1)*0.2)); // Left joystick vertical
+    new Trigger(this::getHoodFineTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, m_shooterSubsystem, () -> m_operatorStick.getRawAxis(1)*0.2)); // Left joystick vertical
+
 
     new JoystickButton(m_operatorStick, 5).whileHeld(new DriveLifterCommand(m_lifterSubsystem, false)); // Left Bumper
     new JoystickButton(m_operatorStick, 7).whileHeld(new DriveLifterCommand(m_lifterSubsystem, true)); // Left Trigger

@@ -98,4 +98,8 @@ public class HoodSubsystem extends SubsystemBase {
   public void resetEncoder () {
     m_hoodController.setSelectedSensorPosition(0);
   }
+
+  public double getHoodTarget() {
+    return m_hoodController.getClosedLoopTarget(0);
+  }
 }
