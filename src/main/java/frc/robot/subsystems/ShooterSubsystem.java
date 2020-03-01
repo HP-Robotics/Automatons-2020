@@ -153,4 +153,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public double getTv() {
     return limelightTable.getEntry("tv").getDouble(0.0);
   }
+
+  public double getTy() {
+    return limelightTable.getEntry("ty").getDouble(0.0);
+  }
 } 

@@ -44,8 +44,18 @@ public class LimeLightCommand extends CommandBase {
       } else {
         command = m_shooter.getTx() / 5.0;
       }
+      if (m_shooter.getTy() <= -12) {
+        command = command * 0.25;
+      } else if (m_shooter.getTy() <= 0) {
+        command = command * 0.5;
+      }
+      
       m_shooter.setManualTurretAngle(command * Constants.turretMovement);
+
+      double hoodPosition = -9.66853 * m_shooter.getTy() + 675.421;
+      m_hood.setHoodPosition(hoodPosition); 
     }
+    
   }
 
   // Called once the command ends or is interrupted.

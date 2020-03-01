@@ -46,6 +46,8 @@ public final class Constants {
     public static final int shooterTimeout = 30;
     public static final double shooterFullspeed = 16000.0; //7000.0;
     public static final double shooterOff = 0.0;
+    public static final double shooterSpeedSlope = 14.3184421535;
+    public static final double shooterSpeedAtTwo = 5356.81557847;
 
     public static final boolean turretSafetyDisabled = true; // TODO FIX THIS
     public static final double turretCoefficient = 0.5;
