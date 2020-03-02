@@ -32,6 +32,7 @@ import frc.robot.commands.TurretCommandManual;
 import frc.robot.commands.TurretOffCommand;
 import frc.robot.commands.TurretSetCommand;
 import frc.robot.commands.SpinWasherCommand;
+import frc.robot.commands.ToggleIntakeCommand;
 import frc.robot.commands.ToggleShooterCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
@@ -42,6 +43,8 @@ import frc.robot.subsystems.WashingMachineSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -76,7 +79,24 @@ public class RobotContainer {
 
   // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
 
-  private final Command m_autoDriveForwardCommand = new AutoDriveForwardCommand(m_driveSubsystem).withTimeout(2);
+  private final Command m_autoDriveForwardCommand = new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem), new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24)));
+
+  private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem), new ShooterSpeedCommand(m_shooterSubsystem, () -> 14000.0))
+    .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
+    .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
+    .andThen(new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(10*12)), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0), new TurretSetCommand(m_shooterSubsystem, () -> 2245.0)))
+    .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75).withTimeout(7))
+    .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
+    .andThen(new ToggleShooterCommand(m_shooterSubsystem));
+
+  private final Command m_threeCell = new ToggleShooterCommand(m_shooterSubsystem)
+  .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
+  .andThen(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 690.0), new TurretSetCommand(m_shooterSubsystem, () -> 2442.0)))
+  .andThen(new ShooterSpeedCommand(m_shooterSubsystem, () -> 10000.0))
+  .andThen(new WaitCommand(2))
+  .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75).withTimeout(6))
+  .andThen(new ToggleShooterCommand(m_shooterSubsystem))
+  .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
 
 
 
@@ -88,6 +108,8 @@ public class RobotContainer {
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("Init line forward", m_autoDriveForwardCommand);
     m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
+    m_autonomousChooser.addOption("Five Cell Auto", m_fiveCell);
+    m_autonomousChooser.addOption("Three Cell Auto", m_threeCell);
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
     
     
@@ -121,7 +143,7 @@ public class RobotContainer {
     new JoystickButton(m_driverStickLeft, 8).whenPressed(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0), new TurretSetCommand(m_shooterSubsystem, () -> 371.0), 
       new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-24.0)))); // Button 8
   
-    new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem)); // X
+    new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed)); // X
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem)); // A
 
     new Trigger(this::getUp).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2350), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 875.0)));
@@ -151,7 +173,7 @@ public class RobotContainer {
 
     new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
     new JoystickButton(m_driverStickRight, 14).whenPressed(new ShooterSpeedCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("A shooter speed named desire", 0.0)));
-    new JoystickButton(m_driverStickRight, 13).whenPressed(new CalibrateDrive(m_driveSubsystem));
+    // new JoystickButton(m_driverStickRight, 13).whenPressed(new CalibrateDrive(m_driveSubsystem));
 
     new JoystickButton(m_driverStickRight, 15).whenPressed(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(SmartDashboard.getNumber("Drive Distance", 0))));
     }

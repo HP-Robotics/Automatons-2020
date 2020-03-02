@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import edu.wpi.first.wpilibj.Timer;
-
 public class SnazzyLog {
 	File m_f;
 	FileWriter m_fw;

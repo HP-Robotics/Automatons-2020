@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.WashingMachineSubsystem;
 
@@ -15,19 +17,22 @@ import frc.robot.Constants;
 public class SpinWasherCommand extends CommandBase {
 
   public final WashingMachineSubsystem m_subsystem;
+  public final DoubleSupplier m_target;
+
   /**
    * Creates a new SpinWasherCommand.
    */
-  public SpinWasherCommand(WashingMachineSubsystem subsystem) {
+  public SpinWasherCommand(WashingMachineSubsystem subsystem, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_subsystem = subsystem;
+    m_target = speed;
     addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setVelocity(Constants.washingMachineSpeed, Constants.intakeSpeed);
+    m_subsystem.setVelocity(m_target.getAsDouble(), Constants.intakeSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

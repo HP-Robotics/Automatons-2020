@@ -73,8 +73,10 @@ public class ShooterSubsystem extends SubsystemBase {
     m_turretController.configPeakOutputForward(1, Constants.shooterTimeout);
     m_turretController.configPeakOutputReverse(-1, Constants.shooterTimeout);
     m_turretController.config_kP(0, 8);
+    m_turretController.config_kI(0, 0.01);
+    m_turretController.config_IntegralZone(0, 100);
     
-    //ledMode.setNumber(1);
+    ledMode.setNumber(1);
   }
 
   @Override
@@ -91,7 +93,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setShooter(boolean enabled) {
     if(!enabled) {
       m_shooterController.set(ControlMode.PercentOutput, 0.0);
-      //ledMode.setNumber(1);
+      ledMode.setNumber(1);
       on = false;
     } else {
       m_shooterController.set(ControlMode.Velocity, m_shooterSpeed);
@@ -102,7 +104,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setTurretSpeed(double horizontalSpeed) {
     if (Constants.turretSafetyDisabled) {
-      m_turretController.set(ControlMode.PercentOutput, horizontalSpeed * Constants.turretCoefficient);
+      m_turretController.set(ControlMode.PercentOutput, horizontalSpeed);
     }
   }
 
@@ -114,6 +116,10 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setTurretAngle(double angle) {
     m_turretController.set(ControlMode.Position, angle);
 
+  }
+
+  public int getTurretEncoder() {
+    return m_turretController.getSelectedSensorPosition(0);
   }
 
   public boolean getEnabled() {

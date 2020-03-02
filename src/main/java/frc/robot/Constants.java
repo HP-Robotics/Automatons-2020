@@ -50,7 +50,6 @@ public final class Constants {
     public static final double shooterSpeedAtTwo = 5356.81557847;
 
     public static final boolean turretSafetyDisabled = true; // TODO FIX THIS
-    public static final double turretCoefficient = 0.5;
     public static final double turretLimit = 3000;
     public static final double hoodCoefficient = 1;
     public static final double turretOff = 0.0;
@@ -94,7 +93,7 @@ public final class Constants {
     public static final double drivetrainF = 0.06;
     public static final double drivetrainP = 0.2;
     public static final double drivetrainI = 0.001;
-    public static final int drivetrainMaxV = 13000;
+    public static final int drivetrainMaxV = 8000;
     public static final int drivetrainMaxA = 10000;
 
 

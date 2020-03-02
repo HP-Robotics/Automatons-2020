@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import java.util.function.IntSupplier;
 
-import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
