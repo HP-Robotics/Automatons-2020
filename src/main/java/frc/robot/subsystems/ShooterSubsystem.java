@@ -102,7 +102,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setTurretSpeed(double horizontalSpeed) {
     if (Constants.turretSafetyDisabled) {
-      System.out.println("TROUBLE !");
       m_turretController.set(ControlMode.PercentOutput, horizontalSpeed * Constants.turretCoefficient);
     }
   }
@@ -114,7 +113,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setTurretAngle(double angle) {
     m_turretController.set(ControlMode.Position, angle);
-    System.out.println("TROUBLE 2 Angle: " + angle);
+
   }
 
   public boolean getEnabled() {
@@ -129,7 +128,6 @@ public class ShooterSubsystem extends SubsystemBase {
     if(newTarget > Constants.turretLimit) {
       newTarget = Constants.turretLimit;
     }
-    System.out.println("BRUH");
     m_turretController.set(ControlMode.Position, newTarget);
   }
 

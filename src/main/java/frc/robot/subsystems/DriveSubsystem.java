@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.SerialPort.Port;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -43,6 +44,16 @@ public class DriveSubsystem extends SubsystemBase {
     backLeftController.configFactoryDefault();
     backRightController.configFactoryDefault();
 
+    frontLeftController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
+    frontRightController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
+    backLeftController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
+    backRightController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
+
+    frontLeftController.setNeutralMode(NeutralMode.Coast);
+    frontRightController.setNeutralMode(NeutralMode.Coast);
+    backLeftController.setNeutralMode(NeutralMode.Coast);
+    backRightController.setNeutralMode(NeutralMode.Coast);
+
     backLeftController.follow(frontLeftController);
     backRightController.follow(frontRightController);
     backLeftController.setInverted(InvertType.FollowMaster);
@@ -51,17 +62,30 @@ public class DriveSubsystem extends SubsystemBase {
     frontLeftController.setInverted(false);
     frontRightController.setInverted(true);
 
+    frontLeftController.config_kF(0, Constants.drivetrainF);
+    frontLeftController.config_kP(0, Constants.drivetrainP);
+    frontLeftController.config_kI(0, Constants.drivetrainI);
+    frontRightController.config_kF(0, Constants.drivetrainF);
+    frontRightController.config_kP(0, Constants.drivetrainP);
+    frontRightController.config_kI(0, Constants.drivetrainI);
+    frontLeftController.configMotionCruiseVelocity(Constants.drivetrainMaxV);
+    frontRightController.configMotionCruiseVelocity(Constants.drivetrainMaxV);
+    frontLeftController.configMotionAcceleration(Constants.drivetrainMaxA, Constants.shooterTimeout);
+    frontRightController.configMotionAcceleration(Constants.drivetrainMaxA, Constants.shooterTimeout);
+
     frontLeftController.configOpenloopRamp(1.0);
     frontRightController.configOpenloopRamp(1.0);
 
+    SmartDashboard.putNumber("Drive Distance", 1.0);
+
     gyro = new ADXRS450_Gyro();
-    navX = new AHRS(Port.kUSB);
+   // navX = new AHRS(Port.kUSB);
     //leftEnc = new Encoder(23, 24, false, CounterBase.EncodingType.k4X);
     //rightEnc = new Encoder(21, 22, true, CounterBase.EncodingType.k4X);
 
     gyro.calibrate();
     gyro.reset();
-    navX.zeroYaw();
+    //navX.zeroYaw();
     //leftEnc.reset();
     //rightEnc.reset();
   }
@@ -70,8 +94,8 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Gyro", gyro.getAngle());
-    SmartDashboard.putNumber("NavX", navX.getYaw());
-    //SmartDashboard.putNumber("Left Encoder", leftEnc.get());
+    //SmartDashboard.putNumber("NavX", navX.getYaw());
+    SmartDashboard.putNumber("Left Encoder", frontLeftController.getSelectedSensorPosition(0));
     //SmartDashboard.putNumber("Right Encoder", rightEnc.get());
   }
 

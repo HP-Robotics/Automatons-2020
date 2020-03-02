@@ -10,7 +10,9 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class HoodSetCommand extends CommandBase {
   /**
@@ -18,24 +20,28 @@ public class HoodSetCommand extends CommandBase {
    */
 
   private final HoodSubsystem m_subsystem;
+  private final ShooterSubsystem m_shooterSubsystem;
   DoubleSupplier m_target;
   
-  public HoodSetCommand(HoodSubsystem subsystem, DoubleSupplier target) {
+  public HoodSetCommand(HoodSubsystem subsystem, ShooterSubsystem shooterSystem, DoubleSupplier target) {
     m_subsystem = subsystem;
+    m_shooterSubsystem = shooterSystem;
     m_target = target;
- 
-      addRequirements(m_subsystem);
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     double target = m_target.getAsDouble();
-    if (target < 50)
-      target = 50;
-    if (target > 1000)
+    if (target < 10) {
+      target = 10;
+    }
+    if (target > 1000) {
        target = 1000;
-      m_subsystem.setHoodPosition(target);
+    }
+    m_subsystem.setHoodPosition(target);
+    m_shooterSubsystem.setShooterSpeed(Constants.shooterSpeedSlope * m_subsystem.getHoodTarget() + Constants.shooterSpeedAtTwo);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -91,6 +91,12 @@ public final class Constants {
     public static final double winchStop = 0.0;
     public static final double lifterSpeed = 0.5;
 
+    public static final double drivetrainF = 0.06;
+    public static final double drivetrainP = 0.2;
+    public static final double drivetrainI = 0.001;
+    public static final int drivetrainMaxV = 13000;
+    public static final int drivetrainMaxA = 10000;
+
 
     /* ########################################################### *
      * #              ENTER THE REALM OF AUTONOMOUS              # *

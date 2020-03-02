@@ -54,6 +54,7 @@ public class LimeLightCommand extends CommandBase {
 
       double hoodPosition = -9.66853 * m_shooter.getTy() + 675.421;
       m_hood.setHoodPosition(hoodPosition); 
+      m_shooter.setShooterSpeed(Constants.shooterSpeedSlope * hoodPosition + Constants.shooterSpeedAtTwo);
     }
     
   }

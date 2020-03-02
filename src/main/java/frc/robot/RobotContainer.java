@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveForwardCommand;
+import frc.robot.commands.CalibrateDrive;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveLifterCommand;
+import frc.robot.commands.DriveSetDistanceCommand;
 import frc.robot.commands.DriveWinchCommand;
 import frc.robot.commands.GyroDriveCommand;
 import frc.robot.commands.CalibrateHood;
@@ -115,12 +117,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_driverStickLeft, 2).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1))); // Middle Button
     new JoystickButton(m_driverStickRight, 1).whileHeld(new IntakeCommand(m_intakeSubsystem)); // Trigger
+    
+    new JoystickButton(m_driverStickLeft, 8).whenPressed(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0), new TurretSetCommand(m_shooterSubsystem, () -> 371.0), 
+      new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-24.0)))); // Button 8
+  
     new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem)); // X
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem)); // A
 
-    new Trigger(this::getUp).whenActive(new HoodSetCommand(m_hoodSubsystem, () -> 875.0));
+    new Trigger(this::getUp).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2350), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 875.0)));
     new Trigger(this::getRight).whileActiveContinuous(new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem));
-    new Trigger(this::getDown).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2500.0), new HoodSetCommand(m_hoodSubsystem, () -> 20.0)));
+    new Trigger(this::getDown).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 371.0), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0)));
     //new Trigger(this::getLeft);
 
     new Trigger(this::getTurretCoarseTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2))); // Right joystick horizontal
@@ -140,12 +146,15 @@ public class RobotContainer {
     new JoystickButton(m_driverStickRight, 5).whenPressed(new TurretSetCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("Turret Position", -1000.0)));
     new JoystickButton(m_driverStickRight, 10).whenPressed(new TurretOffCommand(m_shooterSubsystem));
 
-    new JoystickButton(m_driverStickRight, 6).whenPressed(new HoodSetCommand(m_hoodSubsystem, () -> SmartDashboard.getNumber("Hood Position", 400.0)));
+    new JoystickButton(m_driverStickRight, 6).whenPressed(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem,() -> SmartDashboard.getNumber("Hood Position", 400.0)));
     new JoystickButton(m_driverStickRight, 9).whenPressed(new HoodOffCommand(m_hoodSubsystem));
 
     new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
     new JoystickButton(m_driverStickRight, 14).whenPressed(new ShooterSpeedCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("A shooter speed named desire", 0.0)));
-  }
+    new JoystickButton(m_driverStickRight, 13).whenPressed(new CalibrateDrive(m_driveSubsystem));
+
+    new JoystickButton(m_driverStickRight, 15).whenPressed(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(SmartDashboard.getNumber("Drive Distance", 0))));
+    }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -193,5 +202,9 @@ public class RobotContainer {
 
   public boolean getHoodFineTrigger() {
     return Math.abs(m_operatorStick.getRawAxis(1)) > 0.2;
+  }
+
+  public int inchesToTicks(double input) {
+    return (int)((2048*10.71*input)/(6*Math.PI));
   }
 }

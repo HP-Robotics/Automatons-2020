@@ -7,52 +7,51 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.SnazzyLog;
+import frc.robot.subsystems.DriveSubsystem;
 
-public class TurretSetCommand extends CommandBase {
+public class CalibrateDrive extends CommandBase {
   /**
-   * Creates a new TurretSetCommand.
+   * Creates a new CalibrateTurret.
    */
 
-  ShooterSubsystem m_shooterSubsystem;
-  DoubleSupplier m_target;
-  public TurretSetCommand(ShooterSubsystem subsystem, DoubleSupplier target) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_shooterSubsystem = subsystem;
-    m_target = target;
+  DriveSubsystem m_subsystem;
+  Timer m_timer = new Timer();
+  SnazzyLog m_log;
+
+  public CalibrateDrive(DriveSubsystem subsystem) {
+    m_subsystem = subsystem;
+    m_log = new SnazzyLog();
+    m_log.open("drivetrain.csv", "time, position, velocity\n");
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double target = m_target.getAsDouble();
-
-    if (target < 0) {
-      target = -0.0;
-    }
-    if (target > 3000 ) {
-      target = 3000;
-    }
-    m_shooterSubsystem.setTurretAngle(target);
+    m_timer.start();
+    m_timer.reset();
+    m_subsystem.drive(0.75, 0.75);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_log.write(String.format("%g,%d,%d\n", Timer.getFPGATimestamp(), m_subsystem.frontRightController.getSelectedSensorPosition(0), m_subsystem.frontRightController.getSelectedSensorVelocity(0)));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_subsystem.drive(0.0, 0.0);
+    m_log.close();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return m_timer.hasElapsed(1.1);
   }
 }
