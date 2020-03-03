@@ -1,19 +1,13 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.SerialPort.Port;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -49,10 +43,10 @@ public class DriveSubsystem extends SubsystemBase {
     backLeftController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
     backRightController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
 
-    frontLeftController.setNeutralMode(NeutralMode.Coast);
-    frontRightController.setNeutralMode(NeutralMode.Coast);
-    backLeftController.setNeutralMode(NeutralMode.Coast);
-    backRightController.setNeutralMode(NeutralMode.Coast);
+    frontLeftController.setNeutralMode(NeutralMode.Brake);
+    frontRightController.setNeutralMode(NeutralMode.Brake);
+    backLeftController.setNeutralMode(NeutralMode.Brake);
+    backRightController.setNeutralMode(NeutralMode.Brake);
 
     backLeftController.follow(frontLeftController);
     backRightController.follow(frontRightController);

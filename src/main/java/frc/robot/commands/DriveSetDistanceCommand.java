@@ -52,14 +52,14 @@ public class DriveSetDistanceCommand extends CommandBase {
   public void end(boolean interrupted) {
     m_subsystem.frontLeftController.set(ControlMode.PercentOutput, 0.0);
     m_subsystem.frontRightController.set(ControlMode.PercentOutput, 0.0);
-    m_subsystem.frontLeftController.setNeutralMode(NeutralMode.Coast);
-    m_subsystem.frontRightController.setNeutralMode(NeutralMode.Coast);
+    m_subsystem.frontLeftController.setNeutralMode(NeutralMode.Brake);
+    m_subsystem.frontRightController.setNeutralMode(NeutralMode.Brake);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_subsystem.frontLeftController.getClosedLoopTarget()-m_subsystem.frontLeftController.getSelectedSensorPosition(0)) < 20 && Math.abs(m_subsystem.frontLeftController.getSelectedSensorVelocity(0)) < 2 &&
-       Math.abs(m_subsystem.frontRightController.getClosedLoopTarget()-m_subsystem.frontRightController.getSelectedSensorPosition(0)) < 20 && Math.abs(m_subsystem.frontRightController.getSelectedSensorVelocity(0)) < 2;
+    return Math.abs(m_subsystem.frontLeftController.getClosedLoopTarget()-m_subsystem.frontLeftController.getSelectedSensorPosition(0)) < 100 && Math.abs(m_subsystem.frontLeftController.getSelectedSensorVelocity(0)) < 5 &&
+       Math.abs(m_subsystem.frontRightController.getClosedLoopTarget()-m_subsystem.frontRightController.getSelectedSensorPosition(0)) < 100 && Math.abs(m_subsystem.frontRightController.getSelectedSensorVelocity(0)) < 5;
   }
 }

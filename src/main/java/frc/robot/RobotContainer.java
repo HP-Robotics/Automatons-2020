@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.AutoDriveForwardCommand;
-import frc.robot.commands.CalibrateDrive;
+// import frc.robot.commands.CalibrateDrive;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveLifterCommand;
 import frc.robot.commands.DriveSetDistanceCommand;
@@ -195,8 +194,6 @@ public class RobotContainer {
   }
 
   public boolean getUp() {
-    if(m_operatorStick.getPOV() != -1)
-      System.out.println(m_operatorStick.getPOV());
     return m_operatorStick.getPOV() == 0;   
   }
 

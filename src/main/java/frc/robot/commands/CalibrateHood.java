@@ -38,7 +38,6 @@ public class CalibrateHood extends CommandBase {
   @Override
   public void execute() {
     m_subsystem.setHoodPower(-0.3);
-    System.out.println("Hood is working! " + m_timer.get());
   }
 
   // Called once the command ends or is interrupted.
