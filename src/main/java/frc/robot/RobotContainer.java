@@ -80,6 +80,7 @@ public class RobotContainer {
 
   private final Command m_autoDriveForwardCommand = new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem), new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24)));
 
+  private final boolean m_programmerMode = true;
 
   // If we shoot first, then move: Hood 750, Shooter, 12000, Turret 2200
   private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem), new ShooterSpeedCommand(m_shooterSubsystem, () -> 14000.0))
@@ -166,18 +167,21 @@ public class RobotContainer {
 
     
     //programmer secret buttons
-    new JoystickButton(m_driverStickRight, 5).whenPressed(new TurretSetCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("Turret Position", -1000.0)));
-    new JoystickButton(m_driverStickRight, 10).whenPressed(new TurretOffCommand(m_shooterSubsystem));
 
-    new JoystickButton(m_driverStickRight, 6).whenPressed(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem,() -> SmartDashboard.getNumber("Hood Position", 400.0)));
-    new JoystickButton(m_driverStickRight, 9).whenPressed(new HoodOffCommand(m_hoodSubsystem));
+    if(m_programmerMode) {
+      new JoystickButton(m_driverStickRight, 5).whenPressed(new TurretSetCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("Turret Position", -1000.0)));
+      new JoystickButton(m_driverStickRight, 10).whenPressed(new TurretOffCommand(m_shooterSubsystem));
 
-    new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
-    new JoystickButton(m_driverStickRight, 14).whenPressed(new ShooterSpeedCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("A shooter speed named desire", 0.0)));
-    // new JoystickButton(m_driverStickRight, 13).whenPressed(new CalibrateDrive(m_driveSubsystem));
+      new JoystickButton(m_driverStickRight, 6).whenPressed(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem,() -> SmartDashboard.getNumber("Hood Position", 400.0)));
+      new JoystickButton(m_driverStickRight, 9).whenPressed(new HoodOffCommand(m_hoodSubsystem));
 
-    new JoystickButton(m_driverStickRight, 15).whenPressed(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(SmartDashboard.getNumber("Drive Distance", 0))));
-    }
+      new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
+      new JoystickButton(m_driverStickRight, 14).whenPressed(new ShooterSpeedCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("A shooter speed named desire", 0.0)));
+      // new JoystickButton(m_driverStickRight, 13).whenPressed(new CalibrateDrive(m_driveSubsystem));
+
+      new JoystickButton(m_driverStickRight, 15).whenPressed(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(SmartDashboard.getNumber("Drive Distance", 0))));
+    } 
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
