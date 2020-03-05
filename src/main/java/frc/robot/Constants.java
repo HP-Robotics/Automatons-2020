@@ -50,7 +50,7 @@ public final class Constants {
     public static final double shooterSpeedAtTwo = 5356.81557847;
 
     public static final boolean turretSafetyDisabled = true; // TODO FIX THIS
-    public static final double turretLimit = 3000;
+    public static final double turretLimit = 2800;
     public static final double hoodCoefficient = 1;
     public static final double turretOff = 0.0;
     public static final double hoodOff = 0.0;

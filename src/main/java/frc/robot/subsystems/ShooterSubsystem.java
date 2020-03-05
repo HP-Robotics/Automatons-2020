@@ -73,7 +73,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_turretController.configPeakOutputForward(1, Constants.shooterTimeout);
     m_turretController.configPeakOutputReverse(-1, Constants.shooterTimeout);
     m_turretController.config_kP(0, 8);
-    m_turretController.config_kI(0, 0.01);
+    m_turretController.config_kI(0, 0.05);
     m_turretController.config_IntegralZone(0, 100);
     
     ledMode.setNumber(1);
