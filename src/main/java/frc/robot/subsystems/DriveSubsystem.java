@@ -43,10 +43,10 @@ public class DriveSubsystem extends SubsystemBase {
     backLeftController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
     backRightController.setSelectedSensorPosition(0, 0, Constants.shooterTimeout);
 
-    frontLeftController.setNeutralMode(NeutralMode.Brake);
-    frontRightController.setNeutralMode(NeutralMode.Brake);
-    backLeftController.setNeutralMode(NeutralMode.Brake);
-    backRightController.setNeutralMode(NeutralMode.Brake);
+    frontLeftController.setNeutralMode(NeutralMode.Coast);
+    frontRightController.setNeutralMode(NeutralMode.Coast);
+    backLeftController.setNeutralMode(NeutralMode.Coast);
+    backRightController.setNeutralMode(NeutralMode.Coast);
 
     backLeftController.follow(frontLeftController);
     backRightController.follow(frontRightController);

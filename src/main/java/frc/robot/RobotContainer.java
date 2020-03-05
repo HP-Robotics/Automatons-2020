@@ -86,7 +86,7 @@ public class RobotContainer {
   private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem), new ShooterSpeedCommand(m_shooterSubsystem, () -> 14000.0))
     .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
     .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
-    .andThen(new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5*12)), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0), new TurretSetCommand(m_shooterSubsystem, () -> 2275.0)))
+    .andThen(new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5*12)), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0), new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 40))) //TODO Right direction?
     .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7))
     .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
     .andThen(new ToggleShooterCommand(m_shooterSubsystem));
@@ -108,10 +108,11 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_autonomousChooser = new SendableChooser<Command>();
-    m_autonomousChooser.setDefaultOption("Init line forward", m_autoDriveForwardCommand);
-    m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
-    m_autonomousChooser.addOption("Five Cell Auto", m_fiveCell);
+    m_autonomousChooser.setDefaultOption("Five Cell Auto", m_fiveCell);
     m_autonomousChooser.addOption("Three Cell Auto", m_threeCell);
+    m_autonomousChooser.addOption("Init Line Auto", m_autoDriveForwardCommand);
+    m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
+    
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
     
     

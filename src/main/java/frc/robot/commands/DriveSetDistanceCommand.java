@@ -52,8 +52,8 @@ public class DriveSetDistanceCommand extends CommandBase {
   public void end(boolean interrupted) {
     m_subsystem.frontLeftController.set(ControlMode.PercentOutput, 0.0);
     m_subsystem.frontRightController.set(ControlMode.PercentOutput, 0.0);
-    m_subsystem.frontLeftController.setNeutralMode(NeutralMode.Brake);
-    m_subsystem.frontRightController.setNeutralMode(NeutralMode.Brake);
+    m_subsystem.frontLeftController.setNeutralMode(NeutralMode.Coast);
+    m_subsystem.frontRightController.setNeutralMode(NeutralMode.Coast);
   }
 
   // Returns true when the command should end.
