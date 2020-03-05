@@ -10,6 +10,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class TurretSetCommand extends CommandBase {
@@ -34,8 +35,8 @@ public class TurretSetCommand extends CommandBase {
     if (target < 0) {
       target = -0.0;
     }
-    if (target > 3000 ) {
-      target = 3000;
+    if (target > Constants.turretLimit ) {
+      target = Constants.turretLimit;
     }
     m_shooterSubsystem.setTurretAngle(target);
   }
