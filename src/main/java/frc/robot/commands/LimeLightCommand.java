@@ -52,7 +52,7 @@ public class LimeLightCommand extends CommandBase {
       
       m_shooter.setManualTurretAngle(command * Constants.turretMovement);
 
-      double hoodPosition = -9.66853 * m_shooter.getTy() + 675.421;
+      double hoodPosition = Constants.hoodSlope * m_shooter.getTy() + Constants.hoodIntercept;
       m_hood.setHoodPosition(hoodPosition); 
       m_shooter.setShooterSpeed(Constants.shooterSpeedSlope * hoodPosition + Constants.shooterSpeedAtTwo);
     }

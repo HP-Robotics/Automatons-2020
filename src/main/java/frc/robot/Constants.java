@@ -64,6 +64,8 @@ public final class Constants {
     public static final double hoodRamp = 0.25;
     public static final double hoodBottom = 1100;
     public static final double hoodTop = 400;
+    public static final double hoodSlope = -11.173;
+    public static final double hoodIntercept = 627.73;
     public static final int hoodAbsoluteEncoder = 2;
     public static final int turretClosedLoopSensor = 0;
     public static final int turretSensorTimeout = 100;
