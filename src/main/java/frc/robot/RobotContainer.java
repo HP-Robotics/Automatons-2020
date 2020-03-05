@@ -151,7 +151,7 @@ public class RobotContainer {
     new Trigger(this::getUp).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2350), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 875.0)));
     new Trigger(this::getRight).whileActiveContinuous(new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem));
     new Trigger(this::getDown).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 371.0), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0)));
-    //new Trigger(this::getLeft);
+    new Trigger(this::getLeft).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 371.0), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 690)).andThen(new ShooterSpeedCommand(m_shooterSubsystem, () -> 10000.0)));
 
     new Trigger(this::getTurretCoarseTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2))); // Right joystick horizontal
     new Trigger(this::getHoodCoarseTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, m_shooterSubsystem, () -> m_operatorStick.getRawAxis(3))); // Right joystick vertical
