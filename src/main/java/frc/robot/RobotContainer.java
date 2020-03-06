@@ -64,7 +64,7 @@ public class RobotContainer {
   private final Joystick m_driverStickRight = new Joystick(1);
   private final Joystick m_operatorStick = new Joystick(2);
 
-  private final CameraServer m_camera = CameraServer.getInstance();
+  private  CameraServer m_camera = null;
 
   private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1),
       () -> -m_driverStickRight.getRawAxis(1));
@@ -118,6 +118,21 @@ public class RobotContainer {
                   .withTimeout(7.5),
               new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(7.5)))
           .andThen(new ToggleIntakeCommand(m_intakeSubsystem)).andThen(new ToggleShooterCommand(m_shooterSubsystem));
+  
+  private final Command m_fiveCellLimeLightForward = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem),
+  new ShooterSpeedCommand(m_shooterSubsystem, () -> 14000.0))
+      .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
+      .andThen(
+          new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
+      .andThen(
+          new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5 * 12)),
+              new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0),
+              new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) // TODO Right direction?
+      .andThen(new ParallelCommandGroup(
+          new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7.5),
+          new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(7.5),
+          new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-3 * 12))))
+      .andThen(new ToggleIntakeCommand(m_intakeSubsystem)).andThen(new ToggleShooterCommand(m_shooterSubsystem));
 
   private final Command m_threeCell = new ToggleShooterCommand(m_shooterSubsystem)
       .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
@@ -136,6 +151,7 @@ public class RobotContainer {
     m_autonomousChooser = new SendableChooser<Command>();
     m_autonomousChooser.setDefaultOption("Five Cell Auto", m_fiveCell);
     m_autonomousChooser.addOption("Five Cell Auto (with Limelight)", m_fiveCellLimeLight);
+    m_autonomousChooser.addOption("Five Cell Auto (with Limelight and Forward drive", m_fiveCellLimeLightForward);
     m_autonomousChooser.addOption("Three Cell Auto", m_threeCell);
     m_autonomousChooser.addOption("Init Line Auto", m_autoDriveForwardCommand);
     m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
@@ -154,6 +170,7 @@ public class RobotContainer {
     m_stringChooser.addOption("String 4", "Hi I am a string. 4");
     SmartDashboard.putData("Choose a string", m_stringChooser);
 
+    m_camera = CameraServer.getInstance();
     if (m_camera != null) {
       UsbCamera usbCamera = m_camera.startAutomaticCapture();
       if (usbCamera != null) {
