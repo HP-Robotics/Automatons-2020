@@ -144,6 +144,17 @@ public class RobotContainer {
       .andThen(new ToggleShooterCommand(m_shooterSubsystem))
       .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
 
+  private final Command m_threeCellLimeLight = new ToggleShooterCommand(m_shooterSubsystem)
+      .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
+      .andThen(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 690.0),
+          new TurretSetCommand(m_shooterSubsystem, () -> 2442.0)))
+      .andThen(new ShooterSpeedCommand(m_shooterSubsystem, () -> 10000.0)).andThen(new WaitCommand(2))
+      .andThen(new ParallelCommandGroup(
+          new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75).withTimeout(6),
+          new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(6)))
+      .andThen(new ToggleShooterCommand(m_shooterSubsystem))
+      .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -153,6 +164,7 @@ public class RobotContainer {
     m_autonomousChooser.addOption("Five Cell Auto (with Limelight)", m_fiveCellLimeLight);
     m_autonomousChooser.addOption("Five Cell Auto (with Limelight and Forward drive", m_fiveCellLimeLightForward);
     m_autonomousChooser.addOption("Three Cell Auto", m_threeCell);
+    m_autonomousChooser.addOption("Three Cell Auto (with Limelight)", m_threeCellLimeLight);
     m_autonomousChooser.addOption("Init Line Auto", m_autoDriveForwardCommand);
     m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
 
