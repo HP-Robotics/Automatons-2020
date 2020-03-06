@@ -87,7 +87,6 @@ public class RobotContainer {
     .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
     .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
     .andThen(new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5*12)), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0), new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) //TODO Right direction?
-    .andThen(new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(1.5))
     .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7.5))
     .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
     .andThen(new ToggleShooterCommand(m_shooterSubsystem));
@@ -96,7 +95,7 @@ public class RobotContainer {
     .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
     .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
     .andThen(new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5*12)), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0), new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) //TODO Right direction?
-    .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7))
+    .andThen(new ParallelCommandGroup(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7.5), new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(7.5)))
     .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
     .andThen(new ToggleShooterCommand(m_shooterSubsystem));
 
