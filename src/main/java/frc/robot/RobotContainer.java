@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 // import frc.robot.commands.CalibrateDrive;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveLifterCommand;
@@ -48,20 +50,24 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
-  private final Joystick m_driverStickLeft = new Joystick(0); //TODO - split into two controllers, use constants.
+  private final Joystick m_driverStickLeft = new Joystick(0); // TODO - split into two controllers, use constants.
   private final Joystick m_driverStickRight = new Joystick(1);
   private final Joystick m_operatorStick = new Joystick(2);
 
-  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1), () -> -m_driverStickRight.getRawAxis(1));
+  private final CameraServer m_camera = CameraServer.getInstance();
+
+  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1),
+      () -> -m_driverStickRight.getRawAxis(1));
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
@@ -76,43 +82,55 @@ public class RobotContainer {
   private final SendableChooser<Command> m_autonomousChooser;
   private final SendableChooser<String> m_stringChooser;
 
-  // private final SpinWasherCommand m_spinWasherCommand = new SpinWasherCommand(m_washingMachineSubsystem);
+  // private final SpinWasherCommand m_spinWasherCommand = new
+  // SpinWasherCommand(m_washingMachineSubsystem);
 
-  private final Command m_autoDriveForwardCommand = new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem), new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24)));
+  private final Command m_autoDriveForwardCommand = new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem),
+      new CalibrateTurret(m_shooterSubsystem), new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24)));
 
   private final boolean m_programmerMode = true;
 
   // If we shoot first, then move: Hood 750, Shooter, 12000, Turret 2200
-  private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem), new ShooterSpeedCommand(m_shooterSubsystem, () -> 14000.0))
-    .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
-    .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
-    .andThen(new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5*12)), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0), new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) //TODO Right direction?
-    .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7.5))
-    .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
-    .andThen(new ToggleShooterCommand(m_shooterSubsystem));
+  private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem),
+      new ShooterSpeedCommand(m_shooterSubsystem, () -> 14000.0))
+          .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
+          .andThen(
+              new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
+          .andThen(
+              new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5 * 12)),
+                  new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0),
+                  new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) // TODO Right direction?
+          .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5)
+              .withTimeout(7.5))
+          .andThen(new ToggleIntakeCommand(m_intakeSubsystem)).andThen(new ToggleShooterCommand(m_shooterSubsystem));
 
-  private final Command m_fiveCellLimeLight = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem), new ShooterSpeedCommand(m_shooterSubsystem, () -> 14000.0))
-    .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
-    .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
-    .andThen(new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5*12)), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0), new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) //TODO Right direction?
-    .andThen(new ParallelCommandGroup(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7.5), new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(7.5)))
-    .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
-    .andThen(new ToggleShooterCommand(m_shooterSubsystem));
+  private final Command m_fiveCellLimeLight = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem),
+      new ShooterSpeedCommand(m_shooterSubsystem, () -> 14000.0))
+          .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
+          .andThen(
+              new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
+          .andThen(
+              new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5 * 12)),
+                  new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0),
+                  new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) // TODO Right direction?
+          .andThen(new ParallelCommandGroup(
+              new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5)
+                  .withTimeout(7.5),
+              new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(7.5)))
+          .andThen(new ToggleIntakeCommand(m_intakeSubsystem)).andThen(new ToggleShooterCommand(m_shooterSubsystem));
 
   private final Command m_threeCell = new ToggleShooterCommand(m_shooterSubsystem)
-  .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
-  .andThen(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 690.0), new TurretSetCommand(m_shooterSubsystem, () -> 2442.0)))
-  .andThen(new ShooterSpeedCommand(m_shooterSubsystem, () -> 10000.0))
-  .andThen(new WaitCommand(2))
-  .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75).withTimeout(6))
-  .andThen(new ToggleShooterCommand(m_shooterSubsystem))
-  .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
-
-
-
+      .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
+      .andThen(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 690.0),
+          new TurretSetCommand(m_shooterSubsystem, () -> 2442.0)))
+      .andThen(new ShooterSpeedCommand(m_shooterSubsystem, () -> 10000.0)).andThen(new WaitCommand(2))
+      .andThen(
+          new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75).withTimeout(6))
+      .andThen(new ToggleShooterCommand(m_shooterSubsystem))
+      .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
 
   /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
+   * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     m_autonomousChooser = new SendableChooser<Command>();
@@ -121,14 +139,12 @@ public class RobotContainer {
     m_autonomousChooser.addOption("Three Cell Auto", m_threeCell);
     m_autonomousChooser.addOption("Init Line Auto", m_autoDriveForwardCommand);
     m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
-    
+
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
-    
-    
+
     SmartDashboard.putNumber("Hood Position", 0.0);
     SmartDashboard.putNumber("Turret Position", 0.0);
     SmartDashboard.putNumber("A shooter speed named desire", 0.0);
-
 
     m_stringChooser = new SendableChooser<String>();
     m_stringChooser.setDefaultOption("Default String", "Hi I am a string. 0");
@@ -137,6 +153,20 @@ public class RobotContainer {
     m_stringChooser.addOption("String 3", "Hi I am a string. 3");
     m_stringChooser.addOption("String 4", "Hi I am a string. 4");
     SmartDashboard.putData("Choose a string", m_stringChooser);
+
+    if (m_camera != null) {
+      UsbCamera usbCamera = m_camera.startAutomaticCapture();
+      if (usbCamera != null) {
+        System.out.println("Yay, we have a camera!");
+        usbCamera.setResolution(160, 120);
+        usbCamera.setFPS(10);
+      } else {
+        System.out.println("startAutomaticCapture() failed, no USB Camera");
+      }
+      
+    } else {
+      System.out.println("CAMERA WAS NOT CONNECTED");
+    }
 
     m_driveSubsystem.setDefaultCommand(m_tankDrive);
     configureButtonBindings();
