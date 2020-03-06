@@ -83,10 +83,17 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("Shooter Spinning: ", m_shooterController.getSelectedSensorVelocity() != 0);
+  
+    SmartDashboard.putBoolean("Shooter On", getEnabled());
+    SmartDashboard.putBoolean("Shooter Spun Up", Math.abs(m_shooterController.getClosedLoopError(0)) < 400 && getEnabled());
+    
     SmartDashboard.putNumber("Shooter Speed", m_shooterController.getSelectedSensorVelocity());
     // SmartDashboard.putNumber("Follower Speed", m_shooterFollower.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Turret Current Position", m_turretController.getSelectedSensorPosition(0));
+
+    if (isFwdLimit() && m_turretController.getClosedLoopError(0) > 50) {
+      m_turretController.set(ControlMode.Position, m_turretController.getSelectedSensorPosition());
+    }
     //SmartDashboard.putBoolean("Shooter Commanded: ", m_shooterController.getClosedLoopTarget() != 0);
     //System.out.println("Turret Setpoint: " + m_turretController.getClosedLoopTarget(0) + " Turret Position: " + m_turretController.getSelectedSensorPosition());
   }
@@ -129,6 +136,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setManualTurretAngle(double difference) {
     double newTarget = m_turretController.getClosedLoopTarget(0) - difference;
+    // if (difference > 0 && isFwdLimit()) {
+    //   return;
+    // }
+    // if (difference < 0 && isRevLimit()) {
+    //   return;
+    // }
     if(newTarget < 0) {
       newTarget = 0.0;
     }
@@ -144,6 +157,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean isRevLimit() {
     return m_turretController.getSensorCollection().isRevLimitSwitchClosed();
+  }
+
+  public boolean isFwdLimit() {
+    return m_turretController.getSensorCollection().isFwdLimitSwitchClosed();
   }
 
   public void setShooterSpeed(double speed) {
