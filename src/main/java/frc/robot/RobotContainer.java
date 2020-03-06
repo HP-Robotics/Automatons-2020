@@ -86,7 +86,7 @@ public class RobotContainer {
   private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem), new ShooterSpeedCommand(m_shooterSubsystem, () -> 14000.0))
     .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
     .andThen(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)))
-    .andThen(new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5*12)), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0), new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 40))) //TODO Right direction?
+    .andThen(new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5*12)), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0), new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) //TODO Right direction?
     .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7))
     .andThen(new ToggleIntakeCommand(m_intakeSubsystem))
     .andThen(new ToggleShooterCommand(m_shooterSubsystem));
