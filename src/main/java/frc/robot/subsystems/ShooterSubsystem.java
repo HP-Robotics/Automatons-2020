@@ -179,4 +179,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public double getTy() {
     return limelightTable.getEntry("ty").getDouble(0.0);
   }
+
+  public boolean isAtSpeed() {
+    return (Math.abs(m_shooterController.getClosedLoopError()) < 400);
+  }
 } 

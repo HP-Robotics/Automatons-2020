@@ -76,4 +76,8 @@ public class WashingMachineSubsystem extends SubsystemBase {
         uptakeMotor.set(ControlMode.PercentOutput, uptakeOutput);
       }
     }
+
+    public double getVelocity() {
+      return spinnerMotor.getSelectedSensorVelocity(0);
+    }
 }
