@@ -29,6 +29,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimeLightCommand;
 import frc.robot.commands.ReverseWasherCommand;
 import frc.robot.commands.ShooterSpeedCommand;
+import frc.robot.commands.SmartWasherCommand;
 import frc.robot.commands.TurretCommandManual;
 import frc.robot.commands.TurretOffCommand;
 import frc.robot.commands.TurretSetCommand;
@@ -129,7 +130,8 @@ public class RobotContainer {
               new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0),
               new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) // TODO Right direction?
       .andThen(new ParallelCommandGroup(
-          new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7.5),
+          //new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7.5),
+          new SmartWasherCommand(m_washingMachineSubsystem, m_shooterSubsystem).withTimeout(7.5),
           new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(7.5),
           new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-3 * 12))))
       .andThen(new ToggleIntakeCommand(m_intakeSubsystem)).andThen(new ToggleShooterCommand(m_shooterSubsystem));
@@ -150,7 +152,8 @@ public class RobotContainer {
           new TurretSetCommand(m_shooterSubsystem, () -> 2442.0)))
       .andThen(new ShooterSpeedCommand(m_shooterSubsystem, () -> 10000.0)).andThen(new WaitCommand(2))
       .andThen(new ParallelCommandGroup(
-          new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75).withTimeout(6),
+          //new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75).withTimeout(6),
+          new SmartWasherCommand(m_washingMachineSubsystem, m_shooterSubsystem).withTimeout(6),
           new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(6)))
       .andThen(new ToggleShooterCommand(m_shooterSubsystem))
       .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
@@ -215,7 +218,8 @@ public class RobotContainer {
       new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-24.0)))); // Button 8
   
     new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed)); // X
-    new JoystickButton(m_operatorStick, 4).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5)); //Y
+    //new JoystickButton(m_operatorStick, 4).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5)); //Y
+    new JoystickButton(m_operatorStick, 4).whenHeld(new SmartWasherCommand(m_washingMachineSubsystem, m_shooterSubsystem));
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem)); // A
 
     new Trigger(this::getUp).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2350), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 875.0)));
