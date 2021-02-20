@@ -39,6 +39,7 @@ import frc.robot.commands.ToggleShooterCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LIDARSubsystem;
 import frc.robot.subsystems.LifterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WashingMachineSubsystem;
@@ -80,6 +81,8 @@ public class RobotContainer {
 
   private final LifterSubsystem m_lifterSubsystem = new LifterSubsystem();
 
+  private final LIDARSubsystem m_lidarSubsystem = new LIDARSubsystem();
+
   private final SendableChooser<Command> m_autonomousChooser;
   private final SendableChooser<String> m_stringChooser;
 
@@ -89,7 +92,7 @@ public class RobotContainer {
   private final Command m_autoDriveForwardCommand = new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem),
       new CalibrateTurret(m_shooterSubsystem), new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24)));
 
-  private final boolean m_programmerMode = true;
+  private final boolean m_programmerMode = false;
 
   // If we shoot first, then move: Hood 750, Shooter, 12000, Turret 2200
   private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem),

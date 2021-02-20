@@ -98,6 +98,8 @@ public final class Constants {
     public static final int drivetrainMaxV = 8000;
     public static final int drivetrainMaxA = 10000;
 
+    public static final int lidarId = 0;
+
 
     /* ########################################################### *
      * #              ENTER THE REALM OF AUTONOMOUS              # *
