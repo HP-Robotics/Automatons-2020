@@ -98,4 +98,8 @@ public class DriveSubsystem extends SubsystemBase {
     frontLeftController.set(ControlMode.PercentOutput, left);
     frontRightController.set(ControlMode.PercentOutput, right);
   }
+
+  public double[] getDriveOutputs() {
+    return new double[]{frontLeftController.getMotorOutputPercent(), frontRightController.getMotorOutputPercent()};
+  }
 }
