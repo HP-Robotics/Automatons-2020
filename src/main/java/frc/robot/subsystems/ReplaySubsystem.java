@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ReplaySubsystem extends SubsystemBase {
 
-  private final DriveSubsystem driveSubsystem;
-
   private String m_filename;
   private File m_file;
   private FileWriter m_fw;
@@ -29,11 +27,8 @@ public class ReplaySubsystem extends SubsystemBase {
   /**
    * Creates a new ReplaySubsystem.
    */
-  public ReplaySubsystem(final DriveSubsystem driveSubsystem, final String filename) {
-    this.driveSubsystem = driveSubsystem;
-    if (!openCSV(filename)) {
-      System.out.println("REPLAY FILE FAILED TO OPEN");
-    }
+  public ReplaySubsystem() {
+	  
   }
 
   // Literally just record drive outputs
@@ -43,7 +38,7 @@ public class ReplaySubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public boolean openCSV(final String filename) {
+  public boolean openWritingCSV(final String filename) {
     if (m_filename == null) {
 			return false;
 		}
@@ -69,7 +64,7 @@ public class ReplaySubsystem extends SubsystemBase {
 		m_bw = new BufferedWriter(m_fw);
 		m_open = true;
 
-    return writeCSV("left,right");
+		return writeCSV("left,right");
   }
 
   public void closeCSV() {

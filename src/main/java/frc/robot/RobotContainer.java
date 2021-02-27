@@ -28,6 +28,7 @@ import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimeLightCommand;
 import frc.robot.commands.ReverseWasherCommand;
+import frc.robot.commands.SaveDrivingCommand;
 import frc.robot.commands.ShooterSpeedCommand;
 import frc.robot.commands.SmartWasherCommand;
 import frc.robot.commands.TurretCommandManual;
@@ -41,6 +42,7 @@ import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LIDARSubsystem;
 import frc.robot.subsystems.LifterSubsystem;
+import frc.robot.subsystems.ReplaySubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WashingMachineSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -59,6 +61,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private final boolean recordMode = true;
+
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
@@ -82,6 +86,8 @@ public class RobotContainer {
   private final LifterSubsystem m_lifterSubsystem = new LifterSubsystem();
 
   private final LIDARSubsystem m_lidarSubsystem = new LIDARSubsystem();
+
+  private final ReplaySubsystem m_replaySubsystem = new ReplaySubsystem();
 
   private final SendableChooser<Command> m_autonomousChooser;
   private final SendableChooser<String> m_stringChooser;
@@ -205,6 +211,10 @@ public class RobotContainer {
 
     m_driveSubsystem.setDefaultCommand(m_tankDrive);
     configureButtonBindings();
+
+    if(recordMode) {
+      new SaveDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment.csv");
+    }
   }
 
   /**
