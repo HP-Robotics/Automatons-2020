@@ -99,6 +99,7 @@ public class RobotContainer {
       new CalibrateTurret(m_shooterSubsystem), new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24)));
 
   private final boolean m_programmerMode = false;
+  private final boolean m_bungaMode = true;
 
   // If we shoot first, then move: Hood 750, Shooter, 12000, Turret 2200
   private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem),
@@ -226,33 +227,35 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(m_driverStickLeft, 2).whileHeld(new GyroDriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1))); // Middle Button
     new JoystickButton(m_driverStickRight, 1).whileHeld(new IntakeCommand(m_intakeSubsystem)); // Trigger
-    
-    new JoystickButton(m_driverStickLeft, 8).whenPressed(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0), new TurretSetCommand(m_shooterSubsystem, () -> 371.0), 
-      new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-24.0)))); // Button 8
   
     new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed)); // X
     //new JoystickButton(m_operatorStick, 4).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5)); //Y
     new JoystickButton(m_operatorStick, 4).whenHeld(new SmartWasherCommand(m_washingMachineSubsystem, m_shooterSubsystem));
     new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem)); // A
 
-    new Trigger(this::getUp).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2350), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 875.0)));
     new Trigger(this::getRight).whileActiveContinuous(new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem));
-    new Trigger(this::getDown).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 371.0), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0)));
-    new Trigger(this::getLeft).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 371.0), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 690)).andThen(new ShooterSpeedCommand(m_shooterSubsystem, () -> 10000.0)));
+    if(!m_bungaMode) {
+      new Trigger(this::getDown).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 371.0), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0)));
+      new Trigger(this::getLeft).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 371.0), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 690)).andThen(new ShooterSpeedCommand(m_shooterSubsystem, () -> 10000.0)));
+      new Trigger(this::getUp).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 2350), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 875.0)));
+
+      new JoystickButton(m_operatorStick, 5).whileHeld(new DriveLifterCommand(m_lifterSubsystem, false)); // Left Bumper
+      new JoystickButton(m_operatorStick, 7).whileHeld(new DriveLifterCommand(m_lifterSubsystem, true)); // Left Trigger
+
+      new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem)); // Right Bumper
+      new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new ToggleShooterCommand(m_shooterSubsystem)); // Right Trigger
+
+      new JoystickButton(m_driverStickLeft, 8).whenPressed(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0), new TurretSetCommand(m_shooterSubsystem, () -> 371.0), 
+        new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-24.0)))); // Button 8
+    }
 
     new Trigger(this::getTurretCoarseTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2))); // Right joystick horizontal
     new Trigger(this::getHoodCoarseTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, m_shooterSubsystem, () -> m_operatorStick.getRawAxis(3))); // Right joystick vertical
     new Trigger(this::getTurretFineTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(0)*0.1)); // Left joystick horizontal
     new Trigger(this::getHoodFineTrigger).whileActiveContinuous(new HoodCommandManual(m_hoodSubsystem, m_shooterSubsystem, () -> m_operatorStick.getRawAxis(1)*0.1)); // Left joystick vertical
 
-
-    new JoystickButton(m_operatorStick, 5).whileHeld(new DriveLifterCommand(m_lifterSubsystem, false)); // Left Bumper
-    new JoystickButton(m_operatorStick, 7).whileHeld(new DriveLifterCommand(m_lifterSubsystem, true)); // Left Trigger
-
-    new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem)); // Right Bumper
-    new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new ToggleShooterCommand(m_shooterSubsystem)); // Right Trigger
-
     new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
+    new JoystickButton(m_operatorStick, 10).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
     //programmer secret buttons
     
 
