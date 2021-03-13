@@ -7,8 +7,10 @@
 
 package frc.robot.subsystems;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,11 +20,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ReplaySubsystem extends SubsystemBase {
 
-  private String m_filename;
   private File m_file;
   private FileWriter m_fw;
   private BufferedWriter m_bw;
+  private FileReader m_fr;
+  private BufferedReader m_br;
   private boolean m_open;
+  private boolean m_writing;
 
   /**
    * Creates a new ReplaySubsystem.
@@ -39,13 +43,12 @@ public class ReplaySubsystem extends SubsystemBase {
   }
 
   public boolean openWritingCSV(final String filename) {
-    if (m_filename == null) {
+    	if (filename == null) {
 			return false;
 		}
 		if(m_open) {
-			return true;
+			return m_writing;
 		}
-		m_filename = filename;
 		try {
 			if(Files.exists(Paths.get("/home/lvuser"))) {
 				m_file = new File(String.format("/home/lvuser/%s", filename));
@@ -63,29 +66,32 @@ public class ReplaySubsystem extends SubsystemBase {
 		}
 		m_bw = new BufferedWriter(m_fw);
 		m_open = true;
-
 		return writeCSV("left,right");
   }
 
-  public void closeCSV() {
+	public void closeCSV() {
 		if (m_open) {
 			try {
 				m_bw.close();
 				m_fw.close();
-
 			} catch(IOException e) {
-
 			}
-			m_open = false;
+			try {
+				m_br.close();
+				m_fr.close();
+			} catch(IOException e) {
+			}
+		m_open = false;
 		}
-  }
+	}
   
-  public boolean writeCSV(String s) {
-		if(!m_open) {
+	public boolean writeCSV(String s) {
+		if(!m_open || !m_writing) {
 			return false;
 		}
 		try {
 			m_bw.write(s);
+			m_bw.write("\n");
 			m_bw.flush();
 
 		} catch(IOException e) {
@@ -94,5 +100,58 @@ public class ReplaySubsystem extends SubsystemBase {
 			return false;
 		}
 		return true;
+	}
+
+	public boolean openReadingCSV(String filename) {
+		if (filename == null) {
+			return false;
+		}
+		if(m_open) {
+			return !m_writing;
+		}
+		try {
+			if(Files.exists(Paths.get("/home/lvuser"))) {
+				m_file = new File(String.format("/home/lvuser/%s", filename));
+			} else {
+				m_file = new File(String.format("/tmp/%s",filename));
+			}
+			if(!m_file.exists()) {
+				m_file.createNewFile();
+			}
+			m_fr = new FileReader(m_file);
+
+		} catch(final IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		m_br = new BufferedReader(m_fr);
+		m_open = true;
+		try {
+			m_br.readLine();
+		} catch (IOException e) {
+		}
+		return true;
+	}
+
+	public double[] readLine() {
+		if(!m_open || m_writing) {
+			return null;
+		}
+		String line;
+		try {
+			line = m_br.readLine();
+			if(line == null) {
+				return null;
+			}
+		} catch (IOException e) {
+			return null;
+		}
+		String[] values = line.split(",");
+		if(values.length < 2) {
+			return null;
+		}
+		double left = Double.parseDouble(values[0]);
+		double right = Double.parseDouble(values[1]);
+		return new double[]{left, right};
 	}
 }

@@ -27,6 +27,7 @@ import frc.robot.commands.HoodOffCommand;
 import frc.robot.commands.HoodSetCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LimeLightCommand;
+import frc.robot.commands.ReplayDrivingCommand;
 import frc.robot.commands.ReverseWasherCommand;
 import frc.robot.commands.SaveDrivingCommand;
 import frc.robot.commands.ShooterSpeedCommand;
@@ -61,8 +62,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private final boolean recordMode = true;
-
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
@@ -72,8 +71,8 @@ public class RobotContainer {
 
   private  CameraServer m_camera = null;
 
-  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> -m_driverStickLeft.getRawAxis(1),
-      () -> -m_driverStickRight.getRawAxis(1));
+  private final DriveCommand m_tankDrive = new DriveCommand(m_driveSubsystem, () -> { return Math.pow(-m_driverStickLeft.getRawAxis(1), 3); },
+      () -> { return Math.pow(-m_driverStickRight.getRawAxis(1), 3); });
 
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
@@ -100,6 +99,8 @@ public class RobotContainer {
 
   private final boolean m_programmerMode = false;
   private final boolean m_bungaMode = true;
+  private final boolean m_recordMode = false;
+  private final boolean m_replayMode = false;
 
   // If we shoot first, then move: Hood 750, Shooter, 12000, Turret 2200
   private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem),
@@ -212,10 +213,6 @@ public class RobotContainer {
 
     m_driveSubsystem.setDefaultCommand(m_tankDrive);
     configureButtonBindings();
-
-    if(recordMode) {
-      new SaveDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment.csv");
-    }
   }
 
   /**
@@ -256,9 +253,8 @@ public class RobotContainer {
 
     new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
     new JoystickButton(m_operatorStick, 10).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
-    //programmer secret buttons
-    
 
+    //programmer secret buttons
     if(m_programmerMode) {
       new JoystickButton(m_driverStickRight, 5).whenPressed(new TurretSetCommand(m_shooterSubsystem, () -> SmartDashboard.getNumber("Turret Position", -1000.0)));
       new JoystickButton(m_driverStickRight, 10).whenPressed(new TurretOffCommand(m_shooterSubsystem));
@@ -321,5 +317,14 @@ public class RobotContainer {
 
   public int inchesToTicks(double input) {
     return (int)((2048*10.71*input)/(6*Math.PI));
+  }
+
+  public void startRecording() {
+    if(m_recordMode) {
+      System.out.println("RUNNING COMMAND");
+      m_replaySubsystem.setDefaultCommand(new SaveDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment.csv"));
+    } else if(m_replayMode) {
+      new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment.csv");
+    }
   }
 }

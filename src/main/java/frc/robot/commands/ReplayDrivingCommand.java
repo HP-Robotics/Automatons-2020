@@ -11,19 +11,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ReplaySubsystem;
 
-public class SaveDrivingCommand extends CommandBase {
-
-  private final ReplaySubsystem m_subsystem;
-  private final DriveSubsystem m_driveSubsystem;
-
-  private final String m_filename;
-  private boolean m_end;
+public class ReplayDrivingCommand extends CommandBase {
   /**
-   * Creates a new SaveDrivingCommand.
+   * Creates a new ReplayDrivingCommand.
    */
-  public SaveDrivingCommand(ReplaySubsystem subsystem, DriveSubsystem driveSubsystem, String filename) {
+  private ReplaySubsystem m_subsystem;
+  private DriveSubsystem m_driveSubsystem;
+
+  private String m_filename;
+
+  private boolean m_end;
+    
+  public ReplayDrivingCommand(ReplaySubsystem subsystem, DriveSubsystem driverSubsystem, String filename) {
     m_subsystem = subsystem;
-    m_driveSubsystem = driveSubsystem;
+    m_driveSubsystem = driverSubsystem;
     m_filename = filename;
 
     addRequirements(m_subsystem);
@@ -34,9 +35,9 @@ public class SaveDrivingCommand extends CommandBase {
   public void initialize() {
     boolean opened;
     if (m_filename == null) {
-      opened = m_subsystem.openWritingCSV("supplyafilename.csv");
+      opened = m_subsystem.openReadingCSV("supplyafilename.csv");
     } else {
-      opened = m_subsystem.openWritingCSV(m_filename);
+      opened = m_subsystem.openReadingCSV(m_filename);
     }
     if(!opened) {
       m_end = true;
@@ -46,10 +47,12 @@ public class SaveDrivingCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double outputs[] = m_driveSubsystem.getDriveOutputs();
-    String line = Double.toString(outputs[0]) + "," + Double.toString(outputs[1]);
-
-    m_subsystem.writeCSV(line);
+    double[] values = m_subsystem.readLine();
+    if(values == null || values.length < 2) {
+      m_end = true;
+      return;
+    }
+    new DriveCommand(m_driveSubsystem, () -> values[0], () -> values[1]);
   }
 
   // Called once the command ends or is interrupted.
