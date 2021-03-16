@@ -7,6 +7,14 @@
 
 package frc.robot.commands;
 
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.io.IOException;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ReplaySubsystem;
@@ -21,7 +29,7 @@ public class ReplayDrivingCommand extends CommandBase {
   private String m_filename;
 
   private boolean m_end;
-    
+
   public ReplayDrivingCommand(ReplaySubsystem subsystem, DriveSubsystem driverSubsystem, String filename) {
     m_subsystem = subsystem;
     m_driveSubsystem = driverSubsystem;
@@ -42,6 +50,7 @@ public class ReplayDrivingCommand extends CommandBase {
     if(!opened) {
       m_end = true;
     }
+    System.out.println("END VALUE IS " + m_end);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,13 +61,14 @@ public class ReplayDrivingCommand extends CommandBase {
       m_end = true;
       return;
     }
-    new DriveCommand(m_driveSubsystem, () -> values[0], () -> values[1]);
+    new DriveCommand(m_driveSubsystem, () -> values[0], () -> values[1]).schedule();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_end = false;
+    System.out.println("ENDING THE COMMAND");
     m_subsystem.closeCSV();
   }
 

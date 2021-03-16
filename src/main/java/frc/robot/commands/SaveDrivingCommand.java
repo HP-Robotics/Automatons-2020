@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ReplaySubsystem;
@@ -26,7 +27,7 @@ public class SaveDrivingCommand extends CommandBase {
     m_driveSubsystem = driveSubsystem;
     m_filename = filename;
 
-    addRequirements(m_subsystem);
+    addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -47,7 +48,7 @@ public class SaveDrivingCommand extends CommandBase {
   @Override
   public void execute() {
     double outputs[] = m_driveSubsystem.getDriveOutputs();
-    String line = Double.toString(outputs[0]) + "," + Double.toString(outputs[1]);
+    String line = Double.toString(outputs[0]) + "," + Double.toString(outputs[1]) + "," + Double.toString(Timer.getFPGATimestamp());
 
     m_subsystem.writeCSV(line);
   }

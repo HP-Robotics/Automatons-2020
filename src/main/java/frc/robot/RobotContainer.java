@@ -100,7 +100,7 @@ public class RobotContainer {
   private final boolean m_programmerMode = false;
   private final boolean m_bungaMode = true;
   private final boolean m_recordMode = false;
-  private final boolean m_replayMode = false;
+  private final boolean m_replayMode = true;
 
   // If we shoot first, then move: Hood 750, Shooter, 12000, Turret 2200
   private final Command m_fiveCell = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem),
@@ -228,7 +228,9 @@ public class RobotContainer {
     new JoystickButton(m_operatorStick, 1).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed)); // X
     //new JoystickButton(m_operatorStick, 4).whenHeld(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5)); //Y
     new JoystickButton(m_operatorStick, 4).whenHeld(new SmartWasherCommand(m_washingMachineSubsystem, m_shooterSubsystem));
-    new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem)); // A
+    new JoystickButton(m_operatorStick, 2).whenHeld(new ReverseWasherCommand(m_washingMachineSubsystem)); // 
+    
+    new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new ToggleShooterCommand(m_shooterSubsystem)); // Right Trigger
 
     new Trigger(this::getRight).whileActiveContinuous(new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem));
     if(!m_bungaMode) {
@@ -240,7 +242,6 @@ public class RobotContainer {
       new JoystickButton(m_operatorStick, 7).whileHeld(new DriveLifterCommand(m_lifterSubsystem, true)); // Left Trigger
 
       new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem)); // Right Bumper
-      new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new ToggleShooterCommand(m_shooterSubsystem)); // Right Trigger
 
       new JoystickButton(m_driverStickLeft, 8).whenPressed(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0), new TurretSetCommand(m_shooterSubsystem, () -> 371.0), 
         new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-24.0)))); // Button 8
@@ -321,10 +322,9 @@ public class RobotContainer {
 
   public void startRecording() {
     if(m_recordMode) {
-      System.out.println("RUNNING COMMAND");
-      m_replaySubsystem.setDefaultCommand(new SaveDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment.csv"));
+      new SaveDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment420.csv").schedule();
     } else if(m_replayMode) {
-      new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment.csv");
+      new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment420.csv").schedule();
     }
   }
 }

@@ -51,7 +51,7 @@ public class ReplaySubsystem extends SubsystemBase {
 		}
 		try {
 			if(Files.exists(Paths.get("/home/lvuser"))) {
-				m_file = new File(String.format("/home/lvuser/%s", filename));
+				m_file = new File(String.format("/home/lvuser/replays/%s", filename));
 			} else {
 				m_file = new File(String.format("/tmp/%s",filename));
 			}
@@ -66,22 +66,26 @@ public class ReplaySubsystem extends SubsystemBase {
 		}
 		m_bw = new BufferedWriter(m_fw);
 		m_open = true;
-		return writeCSV("left,right");
+		m_writing = true;
+		return writeCSV("left,right,timestamp");
   }
 
 	public void closeCSV() {
 		if (m_open) {
-			try {
-				m_bw.close();
-				m_fw.close();
-			} catch(IOException e) {
+			if (m_writing) {
+				try {
+					m_bw.close();
+					m_fw.close();
+				} catch(IOException e) {
+				}
+			} else {
+				try {
+					m_br.close();
+					m_fr.close();
+				} catch(IOException e) {
+				}
 			}
-			try {
-				m_br.close();
-				m_fr.close();
-			} catch(IOException e) {
-			}
-		m_open = false;
+			m_open = false;
 		}
 	}
   
@@ -109,14 +113,12 @@ public class ReplaySubsystem extends SubsystemBase {
 		if(m_open) {
 			return !m_writing;
 		}
+		System.out.println("TRYING TO OPEN");
 		try {
 			if(Files.exists(Paths.get("/home/lvuser"))) {
-				m_file = new File(String.format("/home/lvuser/%s", filename));
+				m_file = new File(String.format("/home/lvuser/replays/%s", filename));
 			} else {
 				m_file = new File(String.format("/tmp/%s",filename));
-			}
-			if(!m_file.exists()) {
-				m_file.createNewFile();
 			}
 			m_fr = new FileReader(m_file);
 
@@ -126,6 +128,7 @@ public class ReplaySubsystem extends SubsystemBase {
 		}
 		m_br = new BufferedReader(m_fr);
 		m_open = true;
+		m_writing = false;
 		try {
 			m_br.readLine();
 		} catch (IOException e) {

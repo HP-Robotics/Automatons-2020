@@ -26,6 +26,9 @@ public class DriveSubsystem extends SubsystemBase {
   public TalonFX backLeftController;
   public TalonFX backRightController;
 
+  private double m_left;
+  private double m_right;
+
   public DriveSubsystem() {
     
     frontLeftController = new TalonFX(10);
@@ -97,9 +100,11 @@ public class DriveSubsystem extends SubsystemBase {
   public void drive(double left, double right) {
     frontLeftController.set(ControlMode.PercentOutput, left);
     frontRightController.set(ControlMode.PercentOutput, right);
+    m_left = left;
+    m_right = right;
   }
 
   public double[] getDriveOutputs() {
-    return new double[]{frontLeftController.getMotorOutputPercent(), frontRightController.getMotorOutputPercent()};
+    return new double[]{m_left, m_right};
   }
 }
