@@ -19,6 +19,8 @@ public class SaveDrivingCommand extends CommandBase {
 
   private final String m_filename;
   private boolean m_end;
+  private boolean m_started;
+
   /**
    * Creates a new SaveDrivingCommand.
    */
@@ -42,14 +44,18 @@ public class SaveDrivingCommand extends CommandBase {
     if(!opened) {
       m_end = true;
     }
+    m_started = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double outputs[] = m_driveSubsystem.getDriveOutputs();
+    if (!m_started && outputs[0] == 0.0 && outputs[1] == 0.0) {
+      return;
+    }
     String line = Double.toString(outputs[0]) + "," + Double.toString(outputs[1]) + "," + Double.toString(Timer.getFPGATimestamp());
-
+    m_started = true;
     m_subsystem.writeCSV(line);
   }
 

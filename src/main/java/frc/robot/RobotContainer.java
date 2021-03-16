@@ -245,6 +245,9 @@ public class RobotContainer {
 
       new JoystickButton(m_driverStickLeft, 8).whenPressed(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0), new TurretSetCommand(m_shooterSubsystem, () -> 371.0), 
         new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-24.0)))); // Button 8
+    } else {
+      new JoystickButton(m_operatorStick, 5).whileHeld(new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "replay.csv")); // Left Bumper
+      new JoystickButton(m_operatorStick, 7).whileHeld(new SaveDrivingCommand(m_replaySubsystem, m_driveSubsystem, "replay.csv")); // Left Trigger
     }
 
     new Trigger(this::getTurretCoarseTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2))); // Right joystick horizontal
@@ -321,10 +324,12 @@ public class RobotContainer {
   }
 
   public void startRecording() {
+    /*
     if(m_recordMode) {
       new SaveDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment420.csv").schedule();
     } else if(m_replayMode) {
       new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "seriousbruhmoment420.csv").schedule();
     }
+    */
   }
 }

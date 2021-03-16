@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ReplaySubsystem;
 
@@ -67,9 +68,11 @@ public class ReplayDrivingCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_end = false;
     System.out.println("ENDING THE COMMAND");
+    new InstantCommand(() -> {}, m_driveSubsystem).schedule();
+    m_driveSubsystem.drive(0, 0);
     m_subsystem.closeCSV();
+    m_end = false;
   }
 
   // Returns true when the command should end.
