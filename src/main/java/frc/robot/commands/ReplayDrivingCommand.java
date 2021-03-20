@@ -44,14 +44,13 @@ public class ReplayDrivingCommand extends CommandBase {
   public void initialize() {
     boolean opened;
     if (m_filename == null) {
-      opened = m_subsystem.openReadingCSV("supplyafilename.csv");
+      opened = false;
     } else {
       opened = m_subsystem.openReadingCSV(m_filename);
     }
     if(!opened) {
-      m_end = true;
+      cancel();
     }
-    System.out.println("END VALUE IS " + m_end);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

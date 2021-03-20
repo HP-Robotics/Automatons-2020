@@ -12,8 +12,17 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 // import frc.robot.commands.CalibrateDrive;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriveLifterCommand;
@@ -89,7 +98,7 @@ public class RobotContainer {
   private final ReplaySubsystem m_replaySubsystem = new ReplaySubsystem();
 
   private final SendableChooser<Command> m_autonomousChooser;
-  private final SendableChooser<String> m_stringChooser;
+  //private final SendableChooser<String> m_fileChooser;
 
   // private final SpinWasherCommand m_spinWasherCommand = new
   // SpinWasherCommand(m_washingMachineSubsystem);
@@ -169,32 +178,65 @@ public class RobotContainer {
       .andThen(new ToggleShooterCommand(m_shooterSubsystem))
       .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
 
+  private Command m_galacticSearch;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    /*
+    m_fileChooser = new SendableChooser<String>();
+
+		if(Files.exists(Paths.get("/home/lvuser/replays"))) {
+			File dir = new File("/home/lvuser/replays");
+			for(String name : dir.list()) {
+				m_fileChooser.setDefaultOption(name, name);
+      }
+    }
+
+    
+    m_fileChooser.setDefaultOption("No file selected", "");
+    SmartDashboard.putData("Choose an auto file", m_fileChooser);
+    */
+
+    NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight-yellow");
+    if(limelightTable.getEntry("ta").getDouble(0.0) > 0.06) {
+      if(limelightTable.getEntry("tx1").getDouble(0.0) < 0) {
+        SmartDashboard.putString("Auto Selected", "RED2");
+        m_galacticSearch = new ParallelCommandGroup(new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "gsr2-1001.csv"), new ToggleIntakeCommand(m_intakeSubsystem))
+            .andThen(new ToggleIntakeCommand(m_intakeSubsystem));
+      } else {
+        SmartDashboard.putString("Auto Selected", "RED1");
+        m_galacticSearch = new ParallelCommandGroup(new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "gsr1-948.csv"), new ToggleIntakeCommand(m_intakeSubsystem))
+            .andThen(new ToggleIntakeCommand(m_intakeSubsystem));
+      }
+    } else {
+      if(limelightTable.getEntry("tx0").getDouble(0.0) > 0.50) {
+        SmartDashboard.putString("Auto Selected", "BLUE1");
+        m_galacticSearch = new ParallelCommandGroup(new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "gsb1988.csv"), new ToggleIntakeCommand(m_intakeSubsystem))
+            .andThen(new ToggleIntakeCommand(m_intakeSubsystem));
+      } else {
+        SmartDashboard.putString("Auto Selected", "BLUE2");
+        m_galacticSearch = new ParallelCommandGroup(new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "gsb2806.csv"), new ToggleIntakeCommand(m_intakeSubsystem))
+            .andThen(new ToggleIntakeCommand(m_intakeSubsystem));
+      }
+    }
+
     m_autonomousChooser = new SendableChooser<Command>();
-    m_autonomousChooser.setDefaultOption("Five Cell Auto", m_fiveCell);
+    m_autonomousChooser.addOption("Five Cell Auto", m_fiveCell);
     m_autonomousChooser.addOption("Five Cell Auto (with Limelight)", m_fiveCellLimeLight);
     m_autonomousChooser.addOption("Five Cell Auto (with Limelight and Forward drive", m_fiveCellLimeLightForward);
     m_autonomousChooser.addOption("Three Cell Auto", m_threeCell);
     m_autonomousChooser.addOption("Three Cell Auto (with Limelight)", m_threeCellLimeLight);
     m_autonomousChooser.addOption("Init Line Auto", m_autoDriveForwardCommand);
     m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
+    m_autonomousChooser.setDefaultOption("GalacticSearch", m_galacticSearch);
 
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
 
     SmartDashboard.putNumber("Hood Position", 0.0);
     SmartDashboard.putNumber("Turret Position", 0.0);
     SmartDashboard.putNumber("A shooter speed named desire", 0.0);
-
-    m_stringChooser = new SendableChooser<String>();
-    m_stringChooser.setDefaultOption("Default String", "Hi I am a string. 0");
-    m_stringChooser.addOption("String 1", "Hi I am a string. 1");
-    m_stringChooser.addOption("String 2", "Hi I am a string. 2");
-    m_stringChooser.addOption("String 3", "Hi I am a string. 3");
-    m_stringChooser.addOption("String 4", "Hi I am a string. 4");
-    SmartDashboard.putData("Choose a string", m_stringChooser);
 
     m_camera = CameraServer.getInstance();
     if (m_camera != null) {
