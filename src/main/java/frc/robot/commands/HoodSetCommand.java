@@ -41,7 +41,8 @@ public class HoodSetCommand extends CommandBase {
        target = 1000;
     }
     m_subsystem.setHoodPosition(target);
-    m_shooterSubsystem.setShooterSpeed(Constants.shooterSpeedSlope * m_subsystem.getHoodTarget() + Constants.shooterSpeedAtTwo);
+    m_shooterSubsystem.setShooterSpeed(12000.0);
+    //m_shooterSubsystem.setShooterSpeed(Constants.shooterSpeedSlope * m_subsystem.getHoodTarget() + Constants.shooterSpeedAtTwo);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

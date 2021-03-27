@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.LIDARSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class LimeLightCommand extends CommandBase {
@@ -19,10 +20,13 @@ public class LimeLightCommand extends CommandBase {
 
   ShooterSubsystem m_shooter;
   HoodSubsystem m_hood;
-  public LimeLightCommand(ShooterSubsystem shooter, HoodSubsystem hood) {
+  LIDARSubsystem m_lidar;
+
+  public LimeLightCommand(ShooterSubsystem shooter, HoodSubsystem hood, LIDARSubsystem lidar) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     m_hood = hood;
+    m_lidar = lidar;
   }
 
   // Called when the command is initially scheduled.
@@ -52,9 +56,15 @@ public class LimeLightCommand extends CommandBase {
       
       m_shooter.setManualTurretAngle(command * Constants.turretMovement);
 
-      double hoodPosition = Constants.hoodSlope * m_shooter.getTy() + Constants.hoodIntercept;
-      m_hood.setHoodPosition(hoodPosition); 
-      m_shooter.setShooterSpeed(Constants.shooterSpeedSlope * hoodPosition + Constants.shooterSpeedAtTwo);
+      //double hoodPosition = Constants.hoodSlope * m_shooter.getTy() + Constants.hoodIntercept;
+      double dist = m_lidar.getDistance();
+      double hoodPosition = Constants.lidarA * dist * dist + Constants.lidarB * dist + Constants.lidarC;
+      if (dist < 220) {
+        hoodPosition -= 25;
+      }
+      m_hood.setHoodPosition(hoodPosition);
+      m_shooter.setShooterSpeed(12000);
+      //m_shooter.setShooterSpeed(Constants.shooterSpeedSlope * hoodPosition + Constants.shooterSpeedAtTwo);
     }
     
   }

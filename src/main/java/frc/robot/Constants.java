@@ -99,7 +99,9 @@ public final class Constants {
     public static final int drivetrainMaxA = 10000;
 
     public static final int lidarId = 0;
-
+    public static final double lidarC = 207.86 + 20; // Real + fudge
+    public static final double lidarB = 1.774;
+    public static final double lidarA = -0.0013;
 
     /* ########################################################### *
      * #              ENTER THE REALM OF AUTONOMOUS              # *
