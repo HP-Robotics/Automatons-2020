@@ -4,7 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
+ 
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -107,7 +107,7 @@ public class RobotContainer {
       new CalibrateTurret(m_shooterSubsystem), new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24)));
 
   private final boolean m_programmerMode = false;
-  private final boolean m_bungaMode = true;
+  private final boolean m_bungaMode = false;
   private final boolean m_recordMode = false;
   private final boolean m_replayMode = true;
 
@@ -178,6 +178,8 @@ public class RobotContainer {
       .andThen(new ToggleShooterCommand(m_shooterSubsystem))
       .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
 
+  private final Command m_autoNav = new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "auto.csv");
+
   private Command m_galacticSearch;
 
   /**
@@ -200,7 +202,7 @@ public class RobotContainer {
     */
 
     NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight-yellow");
-    if(limelightTable.getEntry("ta").getDouble(0.0) > 0.06) {
+    if(limelightTable.getEntry("ta").getDouble(0.0) > 0.09) {
       if(limelightTable.getEntry("tx1").getDouble(0.0) < 0) {
         SmartDashboard.putString("Auto Selected", "RED2");
         m_galacticSearch = new ParallelCommandGroup(new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "gsr2-1001.csv"), new ToggleIntakeCommand(m_intakeSubsystem))
@@ -217,7 +219,7 @@ public class RobotContainer {
             .andThen(new ToggleIntakeCommand(m_intakeSubsystem));
       } else {
         SmartDashboard.putString("Auto Selected", "BLUE2");
-        m_galacticSearch = new ParallelCommandGroup(new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "gsb2806.csv"), new ToggleIntakeCommand(m_intakeSubsystem))
+        m_galacticSearch = new ParallelCommandGroup(new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "blue2.csv"), new ToggleIntakeCommand(m_intakeSubsystem))
             .andThen(new ToggleIntakeCommand(m_intakeSubsystem));
       }
     }
@@ -230,7 +232,8 @@ public class RobotContainer {
     m_autonomousChooser.addOption("Three Cell Auto (with Limelight)", m_threeCellLimeLight);
     m_autonomousChooser.addOption("Init Line Auto", m_autoDriveForwardCommand);
     m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
-    m_autonomousChooser.setDefaultOption("GalacticSearch", m_galacticSearch);
+    m_autonomousChooser.addOption("GalacticSearch", m_galacticSearch);
+    m_autonomousChooser.setDefaultOption("AutoNav", m_autoNav);
 
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
 
@@ -286,10 +289,15 @@ public class RobotContainer {
       new JoystickButton(m_operatorStick, 6).whileHeld(new DriveWinchCommand(m_lifterSubsystem)); // Right Bumper
 
       new JoystickButton(m_driverStickLeft, 8).whenPressed(new ParallelCommandGroup(new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0), new TurretSetCommand(m_shooterSubsystem, () -> 371.0), 
-        new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-24.0)))); // Button 8
+      new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-24.0)))); // Button 8
     } else {
+      new JoystickButton(m_driverStickRight, 7).whenPressed(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(Constants.drivingDistance)));
+      new JoystickButton(m_driverStickRight, 8).whenPressed(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-Constants.drivingDistance)));
       new JoystickButton(m_operatorStick, 5).whileHeld(new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "replay.csv")); // Left Bumper
       new JoystickButton(m_operatorStick, 7).whileHeld(new SaveDrivingCommand(m_replaySubsystem, m_driveSubsystem, "replay.csv")); // Left Trigger
+
+      new JoystickButton(m_driverStickLeft, 11).whenPressed(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-125)));
+      new JoystickButton(m_driverStickLeft, 16).whenPressed(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(125)));
     }
 
     new Trigger(this::getTurretCoarseTrigger).whileActiveContinuous(new TurretCommandManual(m_shooterSubsystem, () -> m_operatorStick.getRawAxis(2))); // Right joystick horizontal

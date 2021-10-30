@@ -108,4 +108,6 @@ public final class Constants {
      * ########################################################### */
 
     public static final double initAutoForwardTime = 1.5;
+
+    public static final double drivingDistance = 60.0;
 }
