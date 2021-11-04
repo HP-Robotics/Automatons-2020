@@ -137,7 +137,7 @@ public class RobotContainer {
           .andThen(new ParallelCommandGroup(
               new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5)
                   .withTimeout(7.5),
-              new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem, m_lidarSubsystem).withTimeout(7.5)))
+              new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(7.5)))
           .andThen(new ToggleIntakeCommand(m_intakeSubsystem)).andThen(new ToggleShooterCommand(m_shooterSubsystem));
   
   private final Command m_fiveCellLimeLightForward = new SequentialCommandGroup(new ToggleShooterCommand(m_shooterSubsystem),
@@ -152,7 +152,7 @@ public class RobotContainer {
       .andThen(new ParallelCommandGroup(
           //new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5).withTimeout(7.5),
           new SmartWasherCommand(m_washingMachineSubsystem, m_shooterSubsystem).withTimeout(7.5),
-          new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem, m_lidarSubsystem).withTimeout(7.5),
+          new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(7.5),
           new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(-3 * 12))))
       .andThen(new ToggleIntakeCommand(m_intakeSubsystem)).andThen(new ToggleShooterCommand(m_shooterSubsystem));
 
@@ -174,7 +174,7 @@ public class RobotContainer {
       .andThen(new ParallelCommandGroup(
           //new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75).withTimeout(6),
           new SmartWasherCommand(m_washingMachineSubsystem, m_shooterSubsystem).withTimeout(6),
-          new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem, m_lidarSubsystem).withTimeout(6)))
+          new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(6)))
       .andThen(new ToggleShooterCommand(m_shooterSubsystem))
       .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
 
@@ -277,7 +277,7 @@ public class RobotContainer {
     
     new JoystickButton(m_operatorStick, 8).toggleWhenPressed(new ToggleShooterCommand(m_shooterSubsystem)); // Right Trigger
 
-    new Trigger(this::getRight).whileActiveContinuous(new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem, m_lidarSubsystem));
+    new Trigger(this::getRight).whileActiveContinuous(new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem));
     if(!m_bungaMode) {
       new Trigger(this::getDown).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 371.0), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 10.0)));
       new Trigger(this::getLeft).whenActive(new ParallelCommandGroup(new TurretSetCommand(m_shooterSubsystem, () -> 371.0), new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 690)).andThen(new ShooterSpeedCommand(m_shooterSubsystem, () -> 10000.0)));
