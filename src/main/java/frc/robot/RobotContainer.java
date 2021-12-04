@@ -47,6 +47,7 @@ import frc.robot.commands.TurretSetCommand;
 import frc.robot.commands.SpinWasherCommand;
 import frc.robot.commands.ToggleIntakeCommand;
 import frc.robot.commands.ToggleShooterCommand;
+import frc.robot.commands.TrajectoryExperimentCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -307,6 +308,8 @@ public class RobotContainer {
 
     new JoystickButton(m_driverStickRight, 7).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
     new JoystickButton(m_operatorStick, 10).whenPressed(new ParallelCommandGroup(new CalibrateHood(m_hoodSubsystem), new CalibrateTurret(m_shooterSubsystem)));
+
+    new JoystickButton(m_driverStickLeft, 5).whileHeld(new TrajectoryExperimentCommand(m_driveSubsystem));
 
     //programmer secret buttons
     if(m_programmerMode) {
