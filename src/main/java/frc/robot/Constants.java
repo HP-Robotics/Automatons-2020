@@ -32,7 +32,7 @@ public final class Constants {
     //public static final double washingMachineF = 0.15;
     public static final double washingMachineF = 0.0;
     public static final int washingMachineTimeout = 30;
-    public static final double washingMachineSpeed = -28000.0;
+    public static final double washingMachineSpeed = -33000.0;
     public static final double washingMachineOff = 0.0;
     public static final int washingMachinePDPChannel = 13;
     public static final double washingMachineMaxCurrent = 18.0;

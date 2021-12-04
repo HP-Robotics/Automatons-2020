@@ -121,7 +121,7 @@ public class RobotContainer {
               new ParallelCommandGroup(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(11.5 * 12)),
                   new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0),
                   new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) // TODO Right direction?
-          .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5)
+          .andThen(new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75)
               .withTimeout(7.5))
           .andThen(new ToggleIntakeCommand(m_intakeSubsystem)).andThen(new ToggleShooterCommand(m_shooterSubsystem));
 
@@ -135,7 +135,7 @@ public class RobotContainer {
                   new HoodSetCommand(m_hoodSubsystem, m_shooterSubsystem, () -> 850.0),
                   new TurretSetCommand(m_shooterSubsystem, () -> 2275.0 + 15))) // TODO Right direction?
           .andThen(new ParallelCommandGroup(
-              new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.5)
+              new SpinWasherCommand(m_washingMachineSubsystem, () -> Constants.washingMachineSpeed * 0.75)
                   .withTimeout(7.5),
               new LimeLightCommand(m_shooterSubsystem, m_hoodSubsystem).withTimeout(7.5)))
           .andThen(new ToggleIntakeCommand(m_intakeSubsystem)).andThen(new ToggleShooterCommand(m_shooterSubsystem));
@@ -178,7 +178,7 @@ public class RobotContainer {
       .andThen(new ToggleShooterCommand(m_shooterSubsystem))
       .andThen(new DriveSetDistanceCommand(m_driveSubsystem, () -> inchesToTicks(24.0)));
 
-  private final Command m_autoNav = new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "auto.csv");
+  //private final Command m_autoNav = new ReplayDrivingCommand(m_replaySubsystem, m_driveSubsystem, "auto.csv");
 
   private Command m_galacticSearch;
 
@@ -233,7 +233,7 @@ public class RobotContainer {
     m_autonomousChooser.addOption("Init Line Auto", m_autoDriveForwardCommand);
     m_autonomousChooser.addOption("InstantCommand", new InstantCommand());
     m_autonomousChooser.addOption("GalacticSearch", m_galacticSearch);
-    m_autonomousChooser.setDefaultOption("AutoNav", m_autoNav);
+    m_autonomousChooser.setDefaultOption("Five Cell Auto (with Limelight and Forward drive)", m_fiveCellLimeLightForward);
 
     SmartDashboard.putData("Autonomous Mode", m_autonomousChooser);
 
